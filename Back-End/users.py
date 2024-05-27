@@ -55,5 +55,4 @@ def delete_user(username, password):
 
 
 if __name__ == "__main__":
-   yo = delete_user("Kofi", "9549092733")
-   print(yo)
+    register_user("hello", "9999999999", "10/10/2010")
