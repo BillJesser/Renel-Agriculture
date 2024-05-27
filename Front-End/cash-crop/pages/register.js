@@ -7,7 +7,6 @@ export default function RegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegister = () => {
-    // Add your registration logic here
     if (password !== confirmPassword) {
       alert("Passwords do not match");
     } else {
