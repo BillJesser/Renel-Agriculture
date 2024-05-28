@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Alert } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function HomeScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Reset username and password when screen is focused
+      setUsername('');
+      setPassword('');
+    }, [])
+  );
 
   const handleLogin = () => {
     // Perform validation, e.g., check if username and password are not empty
@@ -12,7 +21,6 @@ export default function HomeScreen({ navigation }) {
       return;
     }
 
-    
     fetch('http://192.168.8.116:5000/login', {
       method: 'POST',
       headers: {
@@ -28,7 +36,7 @@ export default function HomeScreen({ navigation }) {
       if (data.message === 'Login successful.') {
         // Navigate to Dashboard screen if login is successful
         navigation.navigate('Dashboard');
-      } else{
+      } else {
         // Show error message if login failed
         Alert.alert('Error', 'Incorrect username or password');
       }
