@@ -1,31 +1,29 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-export default function DashboardScreen({ navigation }) {
+export default function FinancesScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>₵ash Crop</Text>
+      <Text style={styles.subtitle}>Finances</Text>
+
+      <View style={styles.chartContainer}>
+        {/* Placeholder for the chart */}
+      </View>
 
       <View style={styles.buttonRow}>
         <View style={styles.buttonContainer}>
           <Button
-            title="Finances"
-            onPress={() => navigation.navigate('Finances')}
+            title="Input New Data"
+            onPress={() => alert('Input New Data pressed')}
           />
         </View>
         <View style={styles.buttonContainer}>
           <Button
-            title="Tutorials"
-            onPress={() => navigation.navigate('Tutorials')}
+            title="Print Paper"
+            onPress={() => alert('Print Paper pressed')}
           />
         </View>
-      </View>
-
-      <View style={styles.logoutButtonContainer}>
-        <Button
-          title="Logout"
-          onPress={() => navigation.navigate('Home')}
-        />
       </View>
     </View>
   );
@@ -42,8 +40,23 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     fontWeight: 'bold',
-    marginBottom: 200,
+    marginBottom: 10,
     color: '#080',
+  },
+  subtitle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 50,
+    color: '#080',
+  },
+  chartContainer: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: '#f0f0f0',
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // Style for the placeholder chart area
   },
   buttonRow: {
     flexDirection: 'row',
@@ -53,8 +66,5 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 10,
   },
-  logoutButtonContainer: {
-    width: '100%',
-    marginTop: 20,
-  },
 });
+
