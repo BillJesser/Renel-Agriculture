@@ -53,6 +53,3 @@ def delete_user(username, password):
 
     return False 
 
-
-if __name__ == "__main__":
-    register_user("hello", "9999999999", "10/10/2010")

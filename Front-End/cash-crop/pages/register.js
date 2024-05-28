@@ -6,11 +6,30 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (password !== confirmPassword) {
       alert("Passwords do not match");
-    } else {
-      alert(`Registered with username: ${username}`);
+      return;
+    }
+
+    try {
+      const response = await fetch('http://192.168.8.116:5000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        navigation.navigate('Home');
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("An error occurred during registration:", error);
     }
   };
 
