@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 
-export default function RegisterScreen() {
+
+export default function RegisterScreen({navigation}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegister = async () => {
+    if (!username || !password) {
+      alert('Username and password are required');
+      return;
+    }
+
+    if (username && password && !confirmPassword) {
+      alert('Please Comfirm Password');
+      return;
+    }
+
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;

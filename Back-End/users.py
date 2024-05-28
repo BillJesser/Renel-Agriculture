@@ -11,9 +11,9 @@ def hash_function(password):
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), s)
     return hashed_password
 
-def register_user(username, phone, birthdate):
+def register_user(username, phone):
 
-    if users.find_one({"username": username, "Date of Birth": birthdate}):
+    if users.find_one({"username": username}):
         return False
 
     # Hash the password before storing it
@@ -23,15 +23,14 @@ def register_user(username, phone, birthdate):
     user_data = {
         "username": username,
         "password": hashed_password,
-        "Date of Birth": birthdate,
-        "user_type": "Client",
+        "user_type": "Client"
     }
     users.insert_one(user_data)
     return True
 
-def login(username, password, birthdate):
+def login(username, password):
     # Search database for user
-    user = users.find_one({"username": username, "Date of Birth": birthdate})
+    user = users.find_one({"username": username})
     # Check if username and password match
     if user:
         hashpass = user["password"]
