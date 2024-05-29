@@ -21,7 +21,7 @@ export default function HomeScreen({ navigation }) {
       return;
     }
 
-    fetch('http://192.168.8.116:5000/login', {
+    fetch('http://192.168.0.70:5000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,6 +35,7 @@ export default function HomeScreen({ navigation }) {
     .then(data => {
       if (data.message === 'Login successful.') {
         // Navigate to Dashboard screen if login is successful
+        // check user type to see where to navigate
         navigation.navigate('Dashboard');
       } else {
         // Show error message if login failed
