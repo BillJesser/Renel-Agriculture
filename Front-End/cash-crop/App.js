@@ -8,7 +8,7 @@ import AdminDashboardScreen from './pages/adminDashboard';
 import Finances from './pages/finances';
 import Tutorials from './pages/tutorials';
 import SearchUser from './pages/adminSearch';
-
+import Manage from './pages/manage';
 
 const Stack = createStackNavigator();
 
@@ -16,13 +16,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Cash Crop' } } />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Cash Crop' }} />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
-        <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Dashboard' , headerLeft: null}}  />
-        <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'AdminDashboard', headerLeft: null }} />
+        <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Dashboard', headerLeft: null }} />
+        <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'AdminDashboard' }} />
         <Stack.Screen name="Finances" component={Finances} options={{ title: 'Finances' }} />
         <Stack.Screen name="Tutorials" component={Tutorials} options={{ title: 'Tutorials' }} />
-        <Stack.Screen name="Search" component={SearchUser} options={{ title: 'Search' }} />
+        <Stack.Screen name="Search" component={SearchUser} options={{ title: 'Search' }} />        <Stack.Screen name="Manage" component={Manage} options={{ title: 'Manage Accounts' }} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

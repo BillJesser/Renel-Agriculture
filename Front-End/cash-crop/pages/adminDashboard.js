@@ -33,7 +33,7 @@ export default function AdminDashboardScreen({ navigation }) {
             <Text style={styles.buttonText}>Search Database</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('Manage Accounts pressed')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Manage')}>
           <View style={styles.buttonContent}>
             <Image source={manageAccountsImage} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Manage Accounts</Text>
