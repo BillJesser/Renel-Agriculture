@@ -27,7 +27,7 @@ export default function AdminDashboardScreen({ navigation }) {
       </View>
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('Search Database pressed')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Search')}>
           <View style={styles.buttonContent}>
             <Image source={searchDatabaseImage} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Search Database</Text>
@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonImage: {
-    width: 170,
-    height: 130,
+    width: 150,
+    height: 100,
     // resizeMode: 'contain',
     marginBottom: 10, // space between image and text
   },

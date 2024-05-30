@@ -42,6 +42,18 @@ def login_user():
     return jsonify({"message": "Incorrect username or password."})
 
 
+@app.route("/search_user", methods=["GET"], endpoint="search_user")
+@cross_origin()
+def search_user():
+    query = request.args.get('query', '')
+    if query:
+        matching_users = users.find({"username": {"$regex": query, "$options": "i"}})
+        user_list = [{"username": user["username"], "user_type": user["user_type"]} for user in matching_users]
+        return jsonify(user_list)
+    return jsonify([])
+
+
+
 if __name__ == "__main__":
     cors = CORS(app)
     app.run(host='0.0.0.0')
