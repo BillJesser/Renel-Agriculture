@@ -7,6 +7,7 @@ import DashboardScreen from './pages/userDashboard';
 import AdminDashboardScreen from './pages/adminDashboard';
 import Finances from './pages/finances';
 import Tutorials from './pages/tutorials';
+import SearchUser from './pages/adminSearch';
 import Manage from './pages/manage';
 
 const Stack = createStackNavigator();
@@ -21,7 +22,7 @@ export default function App() {
         <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'AdminDashboard' }} />
         <Stack.Screen name="Finances" component={Finances} options={{ title: 'Finances' }} />
         <Stack.Screen name="Tutorials" component={Tutorials} options={{ title: 'Tutorials' }} />
-        <Stack.Screen name="Manage" component={Manage} options={{ title: 'Manage Accounts' }} />
+        <Stack.Screen name="Search" component={SearchUser} options={{ title: 'Search' }} />        <Stack.Screen name="Manage" component={Manage} options={{ title: 'Manage Accounts' }} />
 
 
       </Stack.Navigator>

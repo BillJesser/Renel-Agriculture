@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-n
 const financeImage = require('../assets/finances.png');
 const manageAccountsImage = require('../assets/settings.jpg');
 const tutorialsImage = require('../assets/corn.png');
-const searchDatabaseImage = require('../assets/search.png');
 
 export default function AdminDashboardScreen({ navigation }) {
   return (
@@ -26,20 +25,12 @@ export default function AdminDashboardScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Search')}>
-          <View style={styles.buttonContent}>
-            <Image source={searchDatabaseImage} style={styles.buttonImage} />
-            <Text style={styles.buttonText}>Search Database</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Manage')}>
-          <View style={styles.buttonContent}>
-            <Image source={manageAccountsImage} style={styles.buttonImage} />
-            <Text style={styles.buttonText}>Manage Accounts</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('Manage Accounts pressed')}>
+        <View style={styles.buttonContent}>
+          <Image source={manageAccountsImage} style={styles.buttonImage} />
+          <Text style={styles.buttonText}>Manage Accounts</Text>
+        </View>
+      </TouchableOpacity>
 
       <View style={styles.logoutButtonContainer}>
         <Button title="Logout" onPress={() => navigation.navigate('Home')} />
@@ -59,15 +50,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     fontWeight: 'bold',
-    marginBottom: 100,
+    marginBottom: 50,
     color: '#080',
   },
   buttonRow: {
     flexDirection: 'row',
     marginBottom: 20,
+    justifyContent: 'center',
   },
   buttonContainer: {
-    flex: 1,
     marginHorizontal: 10,
     alignItems: 'center',
   },
@@ -81,8 +72,7 @@ const styles = StyleSheet.create({
   buttonImage: {
     width: 150,
     height: 100,
-    // resizeMode: 'contain',
-    marginBottom: 10, // space between image and text
+    marginBottom: 10,
   },
   buttonText: {
     fontSize: 16,
@@ -91,7 +81,7 @@ const styles = StyleSheet.create({
   logoutButtonContainer: {
     width: '100%',
     marginTop: 20,
-    alignItems: 'center', // center align the logout button
+    alignItems: 'center',
   },
 });
 
