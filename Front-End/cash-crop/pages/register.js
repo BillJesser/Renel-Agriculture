@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 
-
-export default function RegisterScreen({navigation}) {
+export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
+  const [memberId, setMemberId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegister = async () => {
-    if (!username || !password) {
-      alert('Username and password are required');
+    if (!username || !memberId || !password) {
+      alert('Username, Member ID, and password are required');
       return;
     }
 
-    if (username && password && !confirmPassword) {
-      alert('Please Comfirm Password');
+    if (username && memberId && password && !confirmPassword) {
+      alert('Please confirm your password');
       return;
     }
 
@@ -29,7 +29,7 @@ export default function RegisterScreen({navigation}) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, memberId, password }),
       });
 
       const data = await response.json();
@@ -58,10 +58,20 @@ export default function RegisterScreen({navigation}) {
       />
       <TextInput
         style={styles.input}
+        placeholder="Member ID"
+        placeholderTextColor="#888"
+        value={memberId}
+        onChangeText={setMemberId}
+      />
+      <TextInput
+        style={styles.input}
         placeholder="Password"
         placeholderTextColor="#888"
         secureTextEntry
         value={password}
+        on
+jsx
+Copy code
         onChangeText={setPassword}
       />
       <TextInput

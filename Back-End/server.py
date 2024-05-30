@@ -9,15 +9,16 @@ app = Flask(__name__)
 def register_client():
     data = request.json
     username = data.get("username")
+    memberID = data.get("memberId")
     password = data.get("password")
 
     # Register user (assuming register_user handles hashing/salting)
-    success = register_user(username, password)
+    success = register_user(username, memberID, password)
 
     if success:
         return jsonify({"message": "User registered successfully"})
     else:
-        return jsonify({"error": "Couldn't register user"})
+        return jsonify({"error": "Username and MemberID Must Be Unique From Other Users"}), 400
     
 
 @app.route("/login", methods =["GET", "POST"], endpoint="login_user")
