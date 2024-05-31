@@ -20,8 +20,8 @@ export default function HomeScreen({ navigation }) {
       Alert.alert('Error', 'Username and password are required');
       return;
     }
-
-    fetch('http://192.168.1.2:5000/login', {
+  
+    fetch('http://192.168.1.78:5000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,8 +34,12 @@ export default function HomeScreen({ navigation }) {
     .then(response => response.json())
     .then(data => {
       if (data.message === 'Login successful.') {
-        // Navigate to Dashboard screen if login is successful
-        navigation.navigate('Dashboard');
+        // Check user type and navigate to the appropriate screen
+        if (data.user_type === 'Admin') {
+          navigation.navigate('AdminDashboard');
+        } else if (data.user_type === 'Client') {
+          navigation.navigate('Dashboard');
+        }
       } else {
         // Show error message if login failed
         Alert.alert('Error', 'Incorrect username or password');
