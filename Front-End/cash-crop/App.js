@@ -28,10 +28,8 @@ export default function App() {
         <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'AdminDashboard' }} />
         <Stack.Screen name="Finances" component={Finances} options={{ title: 'Finances' }} />
         <Stack.Screen name="Tutorials" component={Tutorials} options={{ title: 'Tutorials' }} />
-        <Stack.Screen name="Search" component={SearchUser} options={{ title: 'Search' }} />        
+        <Stack.Screen name="Search" component={SearchUser} options={{ title: 'Search' }} />
         <Stack.Screen name="Manage" component={ManageScreen} options={{ title: 'Manage Accounts' }} />
-
-
         <Stack.Screen name="Corn" component={Corn} options={{ title: 'Corn' }} />
         <Stack.Screen name="Soybeans" component={Soybeans} options={{ title: 'Soybeans' }} />
 
