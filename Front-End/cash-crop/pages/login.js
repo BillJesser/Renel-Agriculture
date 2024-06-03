@@ -20,8 +20,8 @@ export default function HomeScreen({ navigation }) {
       Alert.alert('Error', 'Username and password are required');
       return;
     }
-  
-    fetch('http://192.168.1.78:5000/login', {
+
+    fetch('http://192.168.1.41:5000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

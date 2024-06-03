@@ -1,7 +1,7 @@
 import pymongo as pym
 import bcrypt
 
-client = pym.MongoClient("mongodb://localhost:27017/")
+client = pym.MongoClient("mongodb://localhost:27017")
 
 db = client["cashcrop"]
 users = db["users"]

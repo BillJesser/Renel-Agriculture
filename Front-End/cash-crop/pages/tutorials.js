@@ -13,7 +13,7 @@ export default function TutorialsScreen({ navigation }) {
 
             <View style={styles.buttonRow}>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => alert('Corn pressed')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Corn')}>
                         <View style={styles.button}>
                             <Image
                                 source={cornImage}
@@ -24,7 +24,7 @@ export default function TutorialsScreen({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => alert('Soybeans pressed')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Corn')}>
                         <View style={styles.button}>
                             <Image
                                 source={soybeanImage}
