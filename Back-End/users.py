@@ -11,9 +11,12 @@ def hash_function(password):
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), s)
     return hashed_password
 
-def register_user(username, password):
+def register_user(username, memberID, password):
 
     if users.find_one({"username": username}):
+        return False
+    
+    if users.find_one({"memberID": memberID}):
         return False
 
     # Hash the password before storing it
@@ -22,6 +25,7 @@ def register_user(username, password):
     # Insert the new user into the users collection with hashed password
     user_data = {
         "username": username,
+        "memberID": memberID,
         "password": hashed_password,
         "user_type": "Client"
     }
