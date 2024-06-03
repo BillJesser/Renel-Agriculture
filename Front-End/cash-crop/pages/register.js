@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import * as Network from "expo-network";
 
 
 export default function RegisterScreen({navigation}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
 
   const handleRegister = async () => {
     if (!username || !password) {
@@ -24,7 +26,7 @@ export default function RegisterScreen({navigation}) {
     }
 
     try {
-      const response = await fetch('http://192.168.1.78:5000/register', {
+      const response = await fetch('http://192.168.1.41:5000/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
