@@ -22,7 +22,7 @@ const SearchUser = () => {
   };
 
   const handleUserPress = (user) => {
-    navigation.navigate('UserTransactions', { memberID: user.memberID });
+    navigation.navigate('UserTransactions', { memberID: user.memberID, username: user.username });
   };
 
   return (

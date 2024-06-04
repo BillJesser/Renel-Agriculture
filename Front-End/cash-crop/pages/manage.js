@@ -13,7 +13,7 @@ export default function ManageScreen({ navigation }) {
 
             <View style={styles.buttonRow}>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => alert('New Client pressed')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Add Client')}>
                         <View style={styles.button}>
                             <Image
                                 source={addClientImage}
@@ -24,7 +24,7 @@ export default function ManageScreen({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => alert('New admin pressed')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Add Admin')}>
                         <View style={styles.button}>
                             <Image
                                 source={computerImage}

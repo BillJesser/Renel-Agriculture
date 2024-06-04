@@ -32,6 +32,27 @@ def register_user(username, memberID, password):
     users.insert_one(user_data)
     return True
 
+def register_admin(username, adminID, password):
+
+    if users.find_one({"username": username}):
+        return False
+    
+    if users.find_one({"memberID": adminID}):
+        return False
+
+    # Hash the password before storing it
+    hashed_password = hash_function(password)
+
+    # Insert the new user into the users collection with hashed password
+    user_data = {
+        "username": username,
+        "memberID": adminID,
+        "password": hashed_password,
+        "user_type": "Admin"
+    }
+    users.insert_one(user_data)
+    return True
+
 def login(username, password):
     # Search database for user
     user = users.find_one({"username": username})

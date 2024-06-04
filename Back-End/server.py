@@ -76,6 +76,39 @@ def user_transactions():
     return jsonify({"error": "No transactions found for the given member ID"}), 404
 
 
+@app.route("/add_client", methods=["GET","POST"])
+@cross_origin()
+def add_client():
+    data = request.json
+    username = data.get("username")
+    memberID = data.get("memberID")
+    password = data.get("password")
+
+    # Register user (assuming register_user handles hashing/salting)
+    success = register_user(username, memberID, password)
+
+    if success:
+        return jsonify({"success": "User registered successfully"})
+    else:
+        return jsonify({"error": "Username and MemberID Must Be Unique From Other Users"}), 400
+    
+@app.route("/add_admin", methods=["GET","POST"])
+@cross_origin()
+def add_admin():
+    data = request.json
+    username = data.get("username")
+    adminID = data.get("adminID")
+    password = data.get("password")
+
+    success = register_admin(username, adminID, password)
+
+    if success:
+        return jsonify({"success": "Admin registered successfully"})
+    else:
+        return jsonify({"error": "Username and adminID Must Be Unique From Other Admins"}), 400
+
+
+
 if __name__ == "__main__":
     cors = CORS(app)
     app.run(host='0.0.0.0')
