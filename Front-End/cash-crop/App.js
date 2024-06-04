@@ -8,13 +8,10 @@ import AdminDashboardScreen from './pages/adminDashboard';
 import Finances from './pages/finances';
 import Tutorials from './pages/tutorials';
 import SearchUser from './pages/adminSearch';
-
+import UserTransactions from './pages/userTransactions'; 
 import ManageScreen from './pages/manage';
-
 import Corn from './pages/corn';
 import Soybeans from './pages/soybeans';
-
-
 
 const Stack = createStackNavigator();
 
@@ -28,13 +25,11 @@ export default function App() {
         <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'AdminDashboard' }} />
         <Stack.Screen name="Finances" component={Finances} options={{ title: 'Finances' }} />
         <Stack.Screen name="Tutorials" component={Tutorials} options={{ title: 'Tutorials' }} />
-        <Stack.Screen name="Search" component={SearchUser} options={{ title: 'Search' }} />        
+        <Stack.Screen name="Search" component={SearchUser} options={{ title: 'Search' }} />
+        <Stack.Screen name="UserTransactions" component={UserTransactions} options={{ title: 'User Transactions' }} />
         <Stack.Screen name="Manage" component={ManageScreen} options={{ title: 'Manage Accounts' }} />
-
-
         <Stack.Screen name="Corn" component={Corn} options={{ title: 'Corn' }} />
         <Stack.Screen name="Soybeans" component={Soybeans} options={{ title: 'Soybeans' }} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
