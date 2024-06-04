@@ -3,6 +3,10 @@ from flask_cors import CORS, cross_origin
 from users import *
 
 app = Flask(__name__)
+client = pym.MongoClient("mongodb://localhost:27017")
+
+db = client["cashcrop"]
+transactions = db["transactions"]
 
 @app.route("/register", methods=["GET","POST"], endpoint="register_client")
 @cross_origin()
@@ -49,10 +53,27 @@ def search_user():
     query = request.args.get('query', '')
     if query:
         matching_users = users.find({"username": {"$regex": query, "$options": "i"}})
-        user_list = [{"username": user["username"], "user_type": user["user_type"]} for user in matching_users]
+        user_list = [{"username": user["username"], "user_type": user["user_type"], "memberID": user["memberID"]} for user in matching_users]
         return jsonify(user_list)
     return jsonify([])
 
+@app.route('/user_transactions', methods=['GET'])
+@cross_origin()
+def user_transactions():
+    member_id = request.args.get('member_id')
+    if member_id:
+        member_transactions = transactions.find_one({"member_id": member_id})
+        if member_transactions:
+            result = {
+                'transaction_dates': member_transactions['Transactions']['Transaction dates'],
+                'saving_contributions': member_transactions['Transactions']['Saving Contributions'],
+                'cumulative_savings': member_transactions['Transactions']['Cumulative savings'],
+                'loan_amount': member_transactions['Transactions']['Loan amount'],
+                'loan_date': member_transactions['Transactions']['Loan date']
+            }
+            return jsonify(result)
+    
+    return jsonify({"error": "No transactions found for the given member ID"}), 404
 
 
 if __name__ == "__main__":
