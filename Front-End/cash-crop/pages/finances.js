@@ -25,6 +25,13 @@ export default function FinancesScreen({ navigation }) {
           />
         </View>
       </View>
+
+      <View style={styles.singleButtonContainer}>
+        <Button
+          title="Finance Tutorial"
+          onPress={() => alert('Finance Tutorial pressed')}
+        />
+      </View>
     </View>
   );
 }
@@ -65,6 +72,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     marginHorizontal: 10,
+  },
+  singleButtonContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20,
   },
 });
 
