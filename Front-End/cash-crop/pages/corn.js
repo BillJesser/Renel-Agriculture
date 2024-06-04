@@ -10,6 +10,7 @@ const GoogleDriveEmbed = () => {
   const fileId = '1DajcONE5gcn8G5TEej7Hu84TaDTXlQTx';  // Replace with your actual file ID
   const fileUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+  const download  = 'https://drive.usercontent.google.com/u/0/uc?id=1DajcONE5gcn8G5TEej7Hu84TaDTXlQTx&export=download';
 
   // Embed HTML for Google Drive file preview
   const embedHtml = `
@@ -27,7 +28,7 @@ const GoogleDriveEmbed = () => {
         text: 'OK',
         onPress: () => {
           // Open the URL in the default browser to start the download
-          Linking.openURL(fileUrl).catch(err => console.error('An error occurred', err));
+          Linking.openURL(download).catch(err => console.error('An error occurred', err));
         },
       },
     ]);

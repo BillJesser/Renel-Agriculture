@@ -21,7 +21,7 @@ export default function HomeScreen({ navigation }) {
       return;
     }
 
-    fetch('http://192.168.1.41:5000/login', {
+    fetch('http://192.168.0.50:5000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
