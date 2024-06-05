@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
 const cornImage = require('../assets/corn.png');
 const soybeanImage = require('../assets/soybean.jpg');
-const generalImage = require('../assets/general.jpg');
 
 export default function TutorialsScreen({ navigation }) {
     return (
@@ -24,7 +23,7 @@ export default function TutorialsScreen({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Corn')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Soybeans')}>
                         <View style={styles.button}>
                             <Image
                                 source={soybeanImage}
@@ -34,18 +33,6 @@ export default function TutorialsScreen({ navigation }) {
                         </View>
                     </TouchableOpacity>
                 </View>
-            </View>
-
-            <View style={styles.singleButtonContainer}>
-                <TouchableOpacity onPress={() => alert('General pressed')}>
-                    <View style={styles.button}>
-                        <Image
-                            source={generalImage}
-                            style={styles.image}
-                        />
-                        <Text style={styles.buttonText}>General</Text>
-                    </View>
-                </TouchableOpacity>
             </View>
         </View>
     );
@@ -80,11 +67,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginHorizontal: 10,
         alignItems: 'center',
-    },
-    singleButtonContainer: {
-        width: '100%',
-        alignItems: 'center',
-        marginBottom: 20,
     },
     button: {
         width: 180, // Increased width

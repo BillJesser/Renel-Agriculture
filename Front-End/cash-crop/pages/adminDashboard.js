@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
 
 const financeImage = require('../assets/finances.png');
-const manageAccountsImage = require('../assets/settings.jpg');
 const tutorialsImage = require('../assets/corn.png');
+const manageAccountsImage = require('../assets/settings.jpg');
 const searchDatabaseImage = require('../assets/search.png');
 
 export default function AdminDashboardScreen({ navigation }) {
@@ -12,13 +12,13 @@ export default function AdminDashboardScreen({ navigation }) {
       <Text style={styles.title}>₵ash Crop</Text>
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('Finances pressed')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Finances')}>
           <View style={styles.buttonContent}>
             <Image source={financeImage} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Finances</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('Tutorials pressed')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Tutorials')}>
           <View style={styles.buttonContent}>
             <Image source={tutorialsImage} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Tutorials</Text>
@@ -44,7 +44,7 @@ export default function AdminDashboardScreen({ navigation }) {
       <View style={styles.logoutButtonContainer}>
         <Button title="Logout" onPress={() => navigation.navigate('Home')} />
       </View>
-    </View>
+    </View >
   );
 }
 
