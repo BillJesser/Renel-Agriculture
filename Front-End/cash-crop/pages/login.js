@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Alert, ImageBackground, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Alert, ImageBackground, Image, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const farmerImage = require('../assets/farmer1.jpeg');
 const renelImage = require('../assets/renellogo.png');
@@ -8,6 +9,7 @@ const renelImage = require('../assets/renellogo.png');
 export default function HomeScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -17,41 +19,42 @@ export default function HomeScreen({ navigation }) {
     }, [])
   );
 
-  const handleLogin = () => {
-    // Perform validation, e.g., check if username and password are not empty
+  const handleLogin = async () => {
     if (!username || !password) {
       Alert.alert('Error', 'Username and password are required');
       return;
     }
 
-    fetch('http://192.168.0.50:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message === 'Login successful.') {
-          // Check user type and navigate to the appropriate screen
-          if (data.user_type === 'Admin') {
-            navigation.navigate('AdminDashboard');
-          } else if (data.user_type === 'Client') {
-            navigation.navigate('Dashboard');
-          }
-        } else {
-          // Show error message if login failed
-          Alert.alert('Error', 'Incorrect username or password');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        Alert.alert('Error', 'Something went wrong. Please try again.');
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://192.168.5.138:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
       });
+
+      const data = await response.json();
+
+      setLoading(false);
+
+      if (data.message === 'Login successful.') {
+        await AsyncStorage.setItem('username', data.username);
+        if (data.user_type === 'Admin') {
+          navigation.navigate('AdminDashboard');
+        } else if (data.user_type === 'Client') {
+          navigation.navigate('Dashboard');
+        }
+      } else {
+        Alert.alert('Error', 'Incorrect username or password');
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('Error:', error);
+      Alert.alert('Error', 'Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -81,10 +84,11 @@ export default function HomeScreen({ navigation }) {
           onChangeText={text => setPassword(text)}
         />
 
-        <Button
-          title="Login"
-          onPress={handleLogin}
-        />
+        {loading ? (
+          <ActivityIndicator size="large" color="#080" />
+        ) : (
+          <Button title="Login" onPress={handleLogin} />
+        )}
 
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
           <Text style={styles.register}>Register an Account</Text>
@@ -101,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageOpacity: {
-    opacity: 0.3, // Adjust the opacity as needed
+    opacity: 0.3,
   },
   overlay: {
     flex: 1,
@@ -111,8 +115,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logo: {
-    width: 220, // Adjust the width as needed
-    height: 220, // Adjust the height as needed
+    width: 220,
+    height: 220,
     resizeMode: 'contain',
     marginBottom: 30,
   },
@@ -135,7 +139,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: '100%',
     marginBottom: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Slightly opaque background for readability
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
   register: {
     color: 'blue',
