@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FinancesScreen({ navigation }) {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+        if (storedUsername !== null) {
+          setUsername(storedUsername);
+        } 
+      } catch (error) {
+        console.error('Failed to load username:', error);
+      }
+    };
+
+    fetchUsername();
+  }, []);
+
   const tableHead = [
     'Date', 'Savings', 'Cumulative', 'Loan', 
     'Loan Date', 'Repayment Due', 'Repayment', 'Outstanding', 
@@ -12,15 +30,13 @@ export default function FinancesScreen({ navigation }) {
   const tableData = [
     ['2024-06-01', '$500', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
     ['2024-06-01', '$100000', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
-
-    // Add more rows as needed
   ];
 
   const widthArr = [80, 80, 100, 80, 100, 120, 100, 100, 80, 80, 100, 100];
 
   return (
     <View style={styles.container}>
-      <Text style={styles.memberName}>Client: John Doe</Text>
+      <Text style={styles.memberName}>Client: {username}</Text>
       <View style={styles.header}>
         <Text style={styles.title}>₵ash Crop</Text>
       </View>
@@ -79,7 +95,7 @@ const styles = StyleSheet.create({
   memberName: {
     fontSize: 16,
     color: '#080',
-    alignSelf: 'flex-start', // Aligns "Member Name" to the start
+    alignSelf: 'flex-start',
     marginBottom: 5
   },
   subtitle: {
