@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, TextInput, FlatList, Text, StyleSheet } from 'react-native';
+import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const SearchUser = () => {
   const [query, setQuery] = useState('');
   const [users, setUsers] = useState([]);
+  const navigation = useNavigation();
 
   const handleSearch = (text) => {
     setQuery(text);
-    if (text.length > 2) { // Only search when the query length is greater than 2
-      fetch(`http://192.168.1.78:5000/search_user?query=${text}`)
+    if (text.length > 0) {
+      fetch(`http://192.168.1.19:5000/search_user?query=${text}`)
         .then(response => response.json())
         .then(data => setUsers(data))
         .catch(error => {
@@ -17,6 +19,10 @@ const SearchUser = () => {
     } else {
       setUsers([]);
     }
+  };
+
+  const handleUserPress = (user) => {
+    navigation.navigate('UserTransactions', { memberID: user.memberID, username: user.username });
   };
 
   return (
@@ -31,10 +37,12 @@ const SearchUser = () => {
         data={users}
         keyExtractor={(item) => item.username}
         renderItem={({ item }) => (
-          <View style={styles.userItem}>
-            <Text style={styles.username}>{item.username}</Text>
-            <Text style={styles.userType}>{item.user_type}</Text>
-          </View>
+          <TouchableOpacity onPress={() => handleUserPress(item)}>
+            <View style={styles.userItem}>
+              <Text style={styles.username}>{item.username}</Text>
+              <Text style={styles.userType}>{item.user_type}</Text>
+            </View>
+          </TouchableOpacity>
         )}
       />
     </View>
