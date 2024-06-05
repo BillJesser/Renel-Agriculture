@@ -1,15 +1,39 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 export default function FinancesScreen({ navigation }) {
+  const tableHead = [
+    'Date', 'Savings', 'Cumulative', 'Loan', 
+    'Loan Date', 'Repayment Due', 'Repayment', 'Outstanding', 
+    'Interest', 'Dividend', 'Purpose', 'Remarks'
+  ];
+
+  const tableData = [
+    ['2024-06-01', '$500', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
+    ['2024-06-01', '$100000', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
+
+    // Add more rows as needed
+  ];
+
+  const widthArr = [80, 80, 100, 80, 100, 120, 100, 100, 80, 80, 100, 100];
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>₵ash Crop</Text>
+      <Text style={styles.memberName}>Client: John Doe</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>₵ash Crop</Text>
+      </View>
       <Text style={styles.subtitle}>Finances</Text>
 
-      <View style={styles.chartContainer}>
-        {/* Placeholder for the chart */}
-      </View>
+      <ScrollView horizontal style={styles.chartContainer}>
+        <View>
+          <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+            <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
+            <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
+          </Table>
+        </View>
+      </ScrollView>
 
       <View style={styles.buttonRow}>
         <View style={styles.buttonContainer}>
@@ -34,29 +58,42 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
   },
-  title: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#080',
+  header: {
+    width: '100%',
+    alignItems: 'center',
   },
-  subtitle: {
+  title: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 50,
+    color: '#080',
+  },
+  memberName: {
+    fontSize: 16,
+    color: '#080',
+    alignSelf: 'flex-start', // Aligns "Member Name" to the start
+    marginBottom: 5
+  },
+  subtitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
     color: '#080',
   },
   chartContainer: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#f0f0f0',
     marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // Style for the placeholder chart area
+  },
+  head: { 
+    height: 40, 
+    backgroundColor: '#f1f8ff',
+  },
+  text: { 
+    margin: 6,
+    textAlign: 'center',
+    fontSize: 12,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -67,4 +104,3 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
 });
-
