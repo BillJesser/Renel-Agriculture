@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 
 const UserTransactions = ({ route }) => {
-  const { memberID } = route.params;
+  const { memberID, username } = route.params;
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,6 +52,7 @@ const UserTransactions = ({ route }) => {
       minimumZoomScale={0.5}
     >
       <View style={styles.container}>
+        <Text style={styles.heading}>Member Name: {username}</Text>
         <Text style={styles.heading}>Transactions for User ID: {memberID}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
