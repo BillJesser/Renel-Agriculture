@@ -14,6 +14,8 @@ import Corn from './pages/corn';
 import Soybeans from './pages/soybeans';
 import AddClient from './pages/addClient';
 import AddAdmin from './pages/addAdmin';
+import EditUser from './pages/editUser';
+import AccountInfo from './pages/accountInfo';
 
 const Stack = createStackNavigator();
 
@@ -24,7 +26,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Cash Crop' }} />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Dashboard', headerLeft: null }} />
-        <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'AdminDashboard' }} />
+        <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'AdminDashboard' , headerLeft: null }} />
         <Stack.Screen name="Finances" component={Finances} options={{ title: 'Finances' }} />
         <Stack.Screen name="Tutorials" component={Tutorials} options={{ title: 'Tutorials' }} />
         <Stack.Screen name="Search" component={SearchUser} options={{ title: 'Search' }} />
@@ -34,6 +36,8 @@ export default function App() {
         <Stack.Screen name="Soybeans" component={Soybeans} options={{ title: 'Soybeans' }} />
         <Stack.Screen name="Add Client" component={AddClient} options={{ title: 'Add Client' }} />
         <Stack.Screen name="Add Admin" component={AddAdmin} options={{ title: 'Add Admin' }} />
+        <Stack.Screen name="Edit User" component={EditUser} options={{ title: 'Edit User' }} />
+        <Stack.Screen name="AccountInfo" component={AccountInfo} options={{ title: 'Account Info' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

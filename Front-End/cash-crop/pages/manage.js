@@ -37,7 +37,7 @@ export default function ManageScreen({ navigation }) {
             </View>
 
             <View style={styles.singleButtonContainer}>
-                <TouchableOpacity onPress={() => alert('Edit pressed')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Edit User')}>
                     <View style={styles.button}>
                         <Image
                             source={editImage}
