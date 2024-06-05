@@ -39,7 +39,7 @@ export default function FinancesScreen({ navigation }) {
         <View style={styles.buttonContainer}>
           <Button
             title="Input New Data"
-            onPress={() => alert('Input New Data pressed')}
+            onPress={() => navigation.navigate('InputData')}
           />
         </View>
         <View style={styles.buttonContainer}>
