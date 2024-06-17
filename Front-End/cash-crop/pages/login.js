@@ -8,16 +8,15 @@ const farmerImage = require('../assets/farmer1.jpeg');
 const renelImage = require('../assets/renellogo.png');
 
 export default function HomeScreen({ navigation }) {
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [memberId, setMemberId] = useState(''); 
   const [loading, setLoading] = useState(false);
   const [ip, setIp] = useState('');
 
   useFocusEffect(
     React.useCallback(() => {
-      // Reset username and password when screen is focused
-      setUsername('');
       setPassword('');
+      setMemberId(''); 
     }, [])
   );
 
@@ -34,35 +33,37 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      Alert.alert('Error', 'Username and password are required');
+    if (!password || !memberId) {
+      Alert.alert('Error', 'Member ID and password are required');
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       const response = await fetch(`http://192.168.1.170:5000/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ password, memberId }), 
       });
-
+  
       const data = await response.json();
-
+  
       setLoading(false);
-
+  
       if (data.message === 'Login successful.') {
+        await AsyncStorage.setItem('memberID', data.memberId);
         await AsyncStorage.setItem('username', data.username);
+  
         if (data.user_type === 'Admin') {
           navigation.navigate('AdminDashboard');
         } else if (data.user_type === 'Client') {
           navigation.navigate('Dashboard');
         }
       } else {
-        Alert.alert('Error', 'Incorrect username or password');
+        Alert.alert('Error', 'Incorrect member ID or password');
       }
     } catch (error) {
       setLoading(false);
@@ -82,12 +83,13 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.title}>₵ash Crop</Text>
         <Text style={styles.subtitle}>Agriculture Companion</Text>
 
+     
         <TextInput
           style={styles.input}
-          placeholder="Username"
+          placeholder="Member ID" // New Member ID input
           placeholderTextColor="#888"
-          value={username}
-          onChangeText={text => setUsername(text)}
+          value={memberId}
+          onChangeText={text => setMemberId(text)}
         />
         <TextInput
           style={styles.input}

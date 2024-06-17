@@ -21,7 +21,7 @@ const AddClient = () => {
 
     const newUser = { username, memberID, password };
 
-    fetch('http://192.168.1.19:5000/add_client', {
+    fetch('http://192.168.1.49:5000/add_client', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const AddClient = () => {
       })
       .then(data => {
         if (data.success) {
-          Alert.alert('Success', 'User has been registered successfully');
+          alert('Success', 'User has been registered successfully');
           setUsername('');
           setMemberID('');
           setPassword('');
@@ -48,7 +48,7 @@ const AddClient = () => {
       })
       .catch(error => {
         console.error('Error:', error);
-        setError('Error registering user. Please try again.');
+        setError('Member ID Must Be Unique. Please try again.');
       });
   };
 
