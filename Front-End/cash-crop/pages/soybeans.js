@@ -10,7 +10,7 @@ const GoogleDriveEmbed = () => {
   const fileId = '1if7iMyubFUjQh5t0ovUi5qc8oY-PQWlg';  // Replace with your actual file ID
   const fileUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-  const download  = 'https://drive.usercontent.google.com/u/0/uc?id=1if7iMyubFUjQh5t0ovUi5qc8oY-PQWlg&export=download';
+  const download = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
 
   // Embed HTML for Google Drive file preview
   const embedHtml = `

@@ -26,7 +26,7 @@ export default function RegisterScreen({ navigation }) {
     }
 
     try {
-      const response = await fetch('http://192.168.0.50:5000/register', {
+      const response = await fetch('http://192.168.1.65:5000/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

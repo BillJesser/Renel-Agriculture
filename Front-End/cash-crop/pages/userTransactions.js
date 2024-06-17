@@ -9,7 +9,7 @@ const UserTransactions = ({ route }) => {
 
   useEffect(() => {
     if (memberID) {
-      fetch(`http://192.168.1.19:5000/user_transactions?member_id=${memberID}`)
+      fetch(`http://192.168.1.65:5000/user_transactions?member_id=${memberID}`)
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');

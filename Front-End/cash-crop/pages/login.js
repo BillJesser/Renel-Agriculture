@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Alert, ImageBackground, Image, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const farmerImage = require('../assets/farmer1.jpeg');
 const renelImage = require('../assets/renellogo.png');
@@ -10,6 +11,7 @@ export default function HomeScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [ip, setIp] = useState('');
 
   useFocusEffect(
     React.useCallback(() => {
@@ -18,6 +20,18 @@ export default function HomeScreen({ navigation }) {
       setPassword('');
     }, [])
   );
+
+  useEffect(() => {
+    // Fetch and log the local IP address
+    axios.get('https://api.ipify.org?format=json')
+      .then(response => {
+        console.log('Local IPv4 Address:', response.data.ip);
+        setIp(response.data.ip);
+      })
+      .catch(error => {
+        console.error('Error fetching IP address:', error);
+      });
+  }, []);
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -28,7 +42,7 @@ export default function HomeScreen({ navigation }) {
     setLoading(true);
 
     try {
-      const response = await fetch('http://192.168.5.138:5000/login', {
+      const response = await fetch(`http://192.168.1.170:5000/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
