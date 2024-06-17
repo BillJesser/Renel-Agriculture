@@ -22,29 +22,30 @@ def register_client():
     if success:
         return jsonify({"message": "User registered successfully"})
     else:
-        return jsonify({"error": "Username and MemberID Must Be Unique From Other Users"}), 400
+        return jsonify({"error": "MemberID Must Be Unique From Other Users"}), 400
     
 
-@app.route("/login", methods =["GET", "POST"], endpoint="login_user")
+@app.route("/login", methods=["POST"], endpoint="login_user")
 @cross_origin()
 def login_user():
     data = request.json
-    username = data.get("username")
     password = data.get("password")
+    memberID = data.get("memberId")
     
-    # Register user (assuming register_user handles hashing/salting)
-    authorize = login(username, password)
+    # Authenticate user
+    authorize = login(password, memberID)
 
     if authorize:
-        user = users.find_one({"username": username})
+        user = users.find_one({ "memberID": memberID})
         return jsonify(
             {
                 "message": "Login successful.",
-                "username": username,
+                "username": user["username"],
                 "user_type": user["user_type"],
+                "memberId": user["memberID"]
             }
         )
-    return jsonify({"message": "Incorrect username or password."})
+    return jsonify({"message": "Incorrect username, member ID, or password."}), 401
 
 
 @app.route("/search_user", methods=["GET"], endpoint="search_user")
@@ -69,7 +70,15 @@ def user_transactions():
                 'saving_contributions': member_transactions['Transactions']['Saving Contributions'],
                 'cumulative_savings': member_transactions['Transactions']['Cumulative savings'],
                 'loan_amount': member_transactions['Transactions']['Loan amount'],
-                'loan_date': member_transactions['Transactions']['Loan date']
+                'loan_date': member_transactions['Transactions']['Loan date'],
+                'repaymentDueDate' :member_transactions['Transactions']['Repayment Due Date'],
+                'loanRepayment': member_transactions['Transactions']['Loan Repayment'],
+                'outstandingLoanBalance': member_transactions["Transactions"]['Outstanding Loan Balance'],
+                'interestPaid': member_transactions["Transactions"]['Interest Paid'],
+                'dividend': member_transactions['Transactions']['Dividend'],
+                'purposeOfLoan': member_transactions['Transactions']['Purpose of Loan'],
+                'remarks': member_transactions['Transactions']['Remarks']
+
             }
             return jsonify(result)
     
@@ -90,7 +99,7 @@ def add_client():
     if success:
         return jsonify({"success": "User registered successfully"})
     else:
-        return jsonify({"error": "Username and MemberID Must Be Unique From Other Users"}), 400
+        return jsonify({"error": "MemberID Must Be Unique From Other Users"}), 400
     
 @app.route("/add_admin", methods=["GET","POST"])
 @cross_origin()
@@ -105,7 +114,7 @@ def add_admin():
     if success:
         return jsonify({"success": "Admin registered successfully"})
     else:
-        return jsonify({"error": "Username and adminID Must Be Unique From Other Admins"}), 400
+        return jsonify({"error": "AdminID Must Be Unique From Other Admins"}), 400
 
 
 

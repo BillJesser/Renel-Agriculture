@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function InputDataScreen({ navigation }) {
   const [formData, setFormData] = useState({
@@ -19,6 +20,26 @@ export default function InputDataScreen({ navigation }) {
     remarks: ''
   });
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const username = await AsyncStorage.getItem('username');
+        const memberId = await AsyncStorage.getItem('memberID');
+        if (username && memberId) {
+          setFormData((prevData) => ({
+            ...prevData,
+            memberName: username,
+            memberId: memberId
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
@@ -26,21 +47,22 @@ export default function InputDataScreen({ navigation }) {
   const handleSubmit = () => {
     // Handle form submission
     console.log(formData);
-    navigation.goBack();
+    navigation.goBack(); // or navigate to another screen after submission
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {Object.keys(formData).map((key) => (
         <View key={key} style={styles.inputContainer}>
-          <Text style={styles.label}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</Text>
+          <Text style={styles.label}>
+            {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+          </Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, (key === 'memberId' || key === 'memberName') && styles.readOnlyInput]}
             value={formData[key]}
             onChangeText={(value) => handleChange(key, value)}
-            placeholder={
-              key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''
-            }
+            placeholder={key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''}
+            editable={!(key === 'memberId' || key === 'memberName')}
           />
         </View>
       ))}
@@ -69,7 +91,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
+  readOnlyInput: {
+    backgroundColor: '#f0f0f0', 
+  },
   buttonContainer: {
     marginTop: 20,
   },
-});
+})

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 const UserTransactions = ({ route }) => {
   const { memberID, username } = route.params;
@@ -9,7 +10,7 @@ const UserTransactions = ({ route }) => {
 
   useEffect(() => {
     if (memberID) {
-      fetch(`http://192.168.1.19:5000/user_transactions?member_id=${memberID}`)
+      fetch(`http://192.168.0.6:5000/user_transactions?member_id=${memberID}`)
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -43,73 +44,85 @@ const UserTransactions = ({ route }) => {
     );
   }
 
+  const tableHead = [
+    'Transaction Dates', 
+    'Saving Contributions', 
+    'Cumulative Savings', 
+    'Loan Amount', 
+    'Loan Date', 
+    'Repayment Due Date', 
+    'Loan Repayment', 
+    'Outstanding Loan Balance', 
+    'Interest Paid', 
+    'Dividend', 
+    'Purpose of Loan', 
+    'Remarks'
+  ];
+
+  const tableData = transactions.transaction_dates.map((_, index) => [
+    transactions.transaction_dates[index],
+    transactions.saving_contributions[index],
+    transactions.cumulative_savings[index],
+    transactions.loan_amount[index],
+    transactions.loan_date[index],
+    transactions.repaymentDueDate[index],
+    transactions.loanRepayment[index],
+    transactions.outstandingLoanBalance[index],
+    transactions.interestPaid[index],
+    transactions.dividend[index],
+    transactions.purposeOfLoan[index],
+    transactions.remarks[index]
+  ]);
+
+  const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
+
   return (
-    <ScrollView
-      horizontal={true}
-      vertical={true}
-      contentContainerStyle={styles.scrollViewContainer}
-      maximumZoomScale={2}
-      minimumZoomScale={0.5}
-    >
-      <View style={styles.container}>
+    <View style={styles.container}>
+      {/* Static Header */}
+      <View style={styles.header}>
         <Text style={styles.heading}>Member Name: {username}</Text>
-        <Text style={styles.heading}>Transactions for User ID: {memberID}</Text>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <Text style={styles.header}>Transaction Dates</Text>
-            <Text style={styles.header}>Saving Contributions</Text>
-            <Text style={styles.header}>Cumulative Savings</Text>
-            <Text style={styles.header}>Loan Amount</Text>
-            <Text style={styles.header}>Loan Date</Text>
-          </View>
-          {transactions.transaction_dates.map((date, index) => (
-            <View style={styles.row} key={index}>
-              <Text>{date}</Text>
-              <Text>{transactions.saving_contributions[index]}</Text>
-              <Text>{transactions.cumulative_savings[index]}</Text>
-              <Text>{transactions.loan_amount[index]}</Text>
-              <Text>{transactions.loan_date[index]}</Text>
-            </View>
-          ))}
-        </View>
+        <Text style={styles.heading}>User ID: {memberID}</Text>
       </View>
-    </ScrollView>
+
+      {/* Scrollable Table */}
+      <ScrollView horizontal>
+        <ScrollView contentContainerStyle={styles.tableContainer}>
+          <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+            <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
+            <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
+          </Table>
+        </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
     padding: 16,
+    alignSelf: 'flex-start', // Align header to the start (left)
   },
   heading: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 8,
+    color: '#080', // Green color
   },
-  scrollViewContainer: {
-    flexGrow: 1,
+  tableContainer: {
+    padding: 16,
   },
-  table: {
-    flex: 1,
-    flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    minWidth: '100%',
+  head: {
+    height: 50,
+    backgroundColor: '#f1f8ff',
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  header: {
-    fontWeight: 'bold',
-    flex: 1,
-    minWidth: 100,
+  text: {
+    margin: 6,
     textAlign: 'center',
+    fontSize: 12,
   },
 });
 
