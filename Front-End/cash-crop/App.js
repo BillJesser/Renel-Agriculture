@@ -16,13 +16,14 @@ import AddClient from './pages/addClient';
 import AddAdmin from './pages/addAdmin';
 import EditUser from './pages/editUser';
 import AccountInfo from './pages/accountInfo';
+import InputData from './pages/inputData';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Finances">
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Cash Crop' }} />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Dashboard', headerLeft: null }} />
@@ -38,6 +39,7 @@ export default function App() {
         <Stack.Screen name="Add Admin" component={AddAdmin} options={{ title: 'Add Admin' }} />
         <Stack.Screen name="Edit User" component={EditUser} options={{ title: 'Edit User' }} />
         <Stack.Screen name="AccountInfo" component={AccountInfo} options={{ title: 'Account Info' }} />
+        <Stack.Screen name="InputData" component={InputData} options={{ title: 'Input Data' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
