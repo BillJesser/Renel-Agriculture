@@ -21,7 +21,7 @@ const AddAdmin = () => {
 
     const newAdmin = { username, adminID, password };
 
-    fetch('http://192.168.1.19:5000/add_admin', {
+    fetch('http://192.168.1.49:5000/add_admin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const AddAdmin = () => {
       })
       .then(data => {
         if (data.success) {
-          Alert.alert('Success', 'Admin has been registered successfully');
+          alert('Success', 'Admin has been registered successfully');
           setUsername('');
           setAdminID('');
           setPassword('');
@@ -48,7 +48,7 @@ const AddAdmin = () => {
       })
       .catch(error => {
         console.error('Error:', error);
-        setError('Error registering admin. Please try again.');
+        setError('Admin ID Must Be Unique. Please try again.');
       });
   };
 

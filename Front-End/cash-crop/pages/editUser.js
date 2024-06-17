@@ -10,7 +10,7 @@ const EditUser = () => {
   const handleSearch = (text) => {
     setQuery(text);
     if (text.length > 0) {
-      fetch(`http://192.168.1.164:5000/search_user?query=${text}`)
+      fetch(`http://192.168.1.49:5000/search_user?query=${text}`)
         .then(response => response.json())
         .then(data => setUsers(data))
         .catch(error => {
@@ -35,12 +35,12 @@ const EditUser = () => {
       />
       <FlatList
         data={users}
-        keyExtractor={(item) => item.username}
+        keyExtractor={(item) => item.memberID.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleUserPress(item)}>
             <View style={styles.userItem}>
               <Text style={styles.username}>{item.username}</Text>
-              <Text style={styles.userType}>{item.user_type}</Text>
+              <Text style={styles.userDetails}>{item.user_type} #{item.memberID}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  userType: {
+  userDetails: {
     fontSize: 14,
     color: 'gray',
   },
