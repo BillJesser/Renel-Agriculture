@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, ImageBackground } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IpContext } from '../IpContext'; // Import the context
 
 const backgroundImage = require('../assets/farmer1.jpeg');
 
@@ -10,6 +11,7 @@ export default function FinancesScreen({ navigation }) {
   const [memberID, setMemberID] = useState('');
   const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(true);
+  const ip = useContext(IpContext); // Access the IP address
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -36,7 +38,7 @@ export default function FinancesScreen({ navigation }) {
 
   const fetchTransactions = async (memberID) => {
     try {
-      const response = await fetch(`http://192.168.5.241:5000/user_transactions?member_id=${memberID}`);
+      const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
       
       const data = await response.json();
       setTransactions(data);

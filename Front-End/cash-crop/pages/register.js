@@ -10,7 +10,8 @@ export default function RegisterScreen({ navigation }) {
   const [memberId, setMemberId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+  const [loading, setLoading] = useState(false); // Define the loading state
+  const ip = useContext(IpContext); // Access the IP address
 
   const handleRegister = async () => {
     if (!username || !memberId || !password) {
@@ -34,7 +35,7 @@ export default function RegisterScreen({ navigation }) {
       const url = `http://${ip}/register`;
       console.log(`Fetching from URL: ${url}`);
 
-      const response = await fetch(`http://${ip}/register`, {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
