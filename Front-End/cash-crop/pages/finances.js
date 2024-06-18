@@ -7,31 +7,76 @@ const backgroundImage = require('../assets/farmer1.jpeg');
 
 export default function FinancesScreen({ navigation }) {
   const [username, setUsername] = useState('');
+  const [memberID, setMemberID] = useState('');
+  const [transactions, setTransactions] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUsername = async () => {
+    const fetchUserData = async () => {
       try {
         const storedUsername = await AsyncStorage.getItem('username');
+        const storedMemberID = await AsyncStorage.getItem('memberID');
         if (storedUsername !== null) {
           setUsername(storedUsername);
         }
+        if (storedMemberID !== null) {
+          setMemberID(storedMemberID);
+          fetchTransactions(storedMemberID);
+        }
       } catch (error) {
-        console.error('Failed to load username:', error);
+        console.error('Failed to load user data:', error);
+        setLoading(false);
       }
     };
-    fetchUsername();
+
+
+    fetchUserData();
+
   }, []);
 
+  const fetchTransactions = async (memberID) => {
+    try {
+      const response = await fetch(`http://192.168.5.241:5000/user_transactions?member_id=${memberID}`);
+      
+      const data = await response.json();
+      setTransactions(data);
+    }  finally {
+      setLoading(false);
+    }
+  };
+
   const tableHead = [
-    'Date', 'Savings', 'Cumulative', 'Loan',
-    'Loan Date', 'Repayment Due', 'Repayment', 'Outstanding',
-    'Interest', 'Dividend', 'Purpose', 'Remarks'
+    'Transaction Dates', 
+    'Saving Contributions', 
+    'Cumulative Savings', 
+    'Loan Amount', 
+    'Loan Date', 
+    'Repayment Due Date', 
+    'Loan Repayment', 
+    'Outstanding Loan Balance', 
+    'Interest Paid', 
+    'Dividend', 
+    'Purpose of Loan', 
+    'Remarks'
   ];
-  const tableData = [
-    ['2024-06-01', '$500', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
-    ['2024-06-01', '$100000', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
-  ];
-  const widthArr = [80, 80, 100, 80, 100, 120, 100, 100, 80, 80, 100, 100];
+
+  const tableData = transactions && transactions.transaction_dates ? transactions.transaction_dates.map((_, index) => [
+    transactions.transaction_dates[index] || '',
+    transactions.saving_contributions[index] || '',
+    transactions.cumulative_savings[index] || '',
+    transactions.loan_amount[index] || '',
+    transactions.loan_date[index] || '',
+    transactions.repaymentDueDate[index] || '',
+    transactions.loanRepayment[index] || '',
+    transactions.outstandingLoanBalance[index] || '',
+    transactions.interestPaid[index] || '',
+    transactions.dividend[index] || '',
+    transactions.purposeOfLoan[index] || '',
+    transactions.remarks[index] || ''
+  ]) : [['', '', '', '', '', '', '', '', '', '', '', '']]; // Single empty row if no data
+
+  const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
+
 
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
