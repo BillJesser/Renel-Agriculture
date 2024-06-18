@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IpContext } from '../IpContext'; // Import the context
 
 
 export default function InputDataScreen({ navigation }) {
@@ -20,6 +21,7 @@ export default function InputDataScreen({ navigation }) {
     purposeOfLoan: '',
     remarks: ''
   });
+  const ip = useContext(IpContext); // Access the IP address
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -48,7 +50,7 @@ export default function InputDataScreen({ navigation }) {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://192.168.5.242:5000/insert', {
+      const response = await fetch(`http://${ip}/insert`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
