@@ -19,6 +19,7 @@ import EditUser from './pages/editUser';
 import AccountInfo from './pages/accountInfo';
 import InputData from './pages/inputData';
 import { IpProvider } from './IpContext';
+import LoginTutorials from './pages/loginTutorial';
 
 const Stack = createStackNavigator();
 const ipAddress = '192.168.1.170:5000';  // Manually set the IP address here
@@ -43,6 +44,7 @@ export default function App() {
           <Stack.Screen name="Add Admin" component={AddAdmin} options={{ title: 'Add Admin' }} />
           <Stack.Screen name="Edit User" component={EditUser} options={{ title: 'Edit User' }} />
           <Stack.Screen name="AccountInfo" component={AccountInfo} options={{ title: 'Account Info' }} />
+          <Stack.Screen name="LoginTutorial" component={LoginTutorials} options={{ title: 'Login Tutorial' }} />
           <Stack.Screen name="InputData" component={InputData} options={{ title: 'Input Data' }} />
         </Stack.Navigator>
       </NavigationContainer>

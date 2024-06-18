@@ -1,6 +1,5 @@
-// pages/login.js (HomeScreen)
-import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Alert, ImageBackground, Image, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, ImageBackground, Image, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IpContext } from '../IpContext'; // Import the context
@@ -72,6 +71,7 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.title}>₵ash Crop</Text>
         <Text style={styles.subtitle}>Agriculture Companion</Text>
 
+     
         <TextInput
           style={styles.input}
           placeholder="Member ID"
@@ -91,11 +91,17 @@ export default function HomeScreen({ navigation }) {
         {loading ? (
           <ActivityIndicator size="large" color="#080" />
         ) : (
-          <Button title="Login" onPress={handleLogin} />
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
         )}
 
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
           <Text style={styles.register}>Register an Account</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('LoginTutorial')}>
+          <Text style={styles.tutorial}>Login Tutorials</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -109,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageOpacity: {
-    opacity: 0.3,
+    opacity: 0.25,
   },
   overlay: {
     flex: 1,
@@ -119,20 +125,20 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logo: {
-    width: 220,
-    height: 220,
+    width: 270,
+    height: 270,
     resizeMode: 'contain',
-    marginBottom: 30,
+    marginBottom: 40,
   },
   title: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#080',
+    color: '#080', // Green color for the title
   },
   subtitle: {
-    fontSize: 20,
-    color: '#080',
+    fontSize: 22,
+    color: '#080', // Green color for the subtitle
     marginBottom: 20,
   },
   input: {
@@ -145,9 +151,28 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
+  button: {
+    backgroundColor: '#080', // Green color for the button
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 15,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
   register: {
     color: 'blue',
     marginTop: 20,
     textDecorationLine: 'underline',
   },
+
+  tutorial: {
+    color: 'blue',
+    marginTop: 10,
+    textDecorationLine: 'underline',
+  },
+
 });
