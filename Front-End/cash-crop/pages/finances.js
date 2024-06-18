@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, ImageBackground } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const backgroundImage = require('../assets/farmer1.jpeg');
 
 export default function FinancesScreen({ navigation }) {
   const [username, setUsername] = useState('');
@@ -27,7 +29,9 @@ export default function FinancesScreen({ navigation }) {
       }
     };
 
+
     fetchUserData();
+
   }, []);
 
   const fetchTransactions = async (memberID) => {
@@ -73,52 +77,63 @@ export default function FinancesScreen({ navigation }) {
 
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.memberName}>Client: {username}</Text>
-      <View style={styles.header}>
-        <Text style={styles.title}>₵ash Crop</Text>
-      </View>
-      <Text style={styles.subtitle}>Finances</Text>
-
-      <ScrollView horizontal style={styles.chartContainer}>
-        <View>
-          <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-            <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
-            <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
-          </Table>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
+      <View style={styles.overlay}>
+        <Text style={styles.memberName}>Client: {username}</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>₵ash Crop</Text>
         </View>
-      </ScrollView>
-
-      <View style={styles.buttonRow}>
-        <View style={styles.buttonContainer}>
+        <Text style={styles.subtitle}>Finances</Text>
+        <ScrollView horizontal style={styles.chartContainer}>
+          <View>
+            <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+              <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
+              <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
+            </Table>
+          </View>
+        </ScrollView>
+        <View style={styles.buttonRow}>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Input New Data"
+              onPress={() => navigation.navigate('InputData')} // Update this line
+              color="#080"
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Print Paper"
+              onPress={() => alert('Print Paper pressed')}
+              color="#080"
+            />
+          </View>
+        </View>
+        <View style={styles.singleButtonContainer}>
           <Button
-            title="Input New Data"
-            onPress={() => navigation.navigate('InputData')}
+            title="Finance Tutorial"
+            onPress={() => alert('Finance Tutorial pressed')}
+            color="#080"
           />
         </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Print Paper"
-            onPress={() => alert('Print Paper pressed')}
-          />
-        </View>
       </View>
-
-      <View style={styles.singleButtonContainer}>
-        <Button
-          title="Finance Tutorial"
-          onPress={() => alert('Finance Tutorial pressed')}
-        />
-      </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageOpacity: {
+    opacity: 0.3,
+  },
+  overlay: {
+    flex: 1,
+    width: '100%',
     alignItems: 'center',
     padding: 20,
   },
