@@ -11,7 +11,7 @@ export default function FinancesScreen({ navigation }) {
   const [memberID, setMemberID] = useState('');
   const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(true);
-  const ip = useContext(IpContext); // Access the IP address
+  const ip = useContext(IpContext); 
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,7 +31,6 @@ export default function FinancesScreen({ navigation }) {
       }
     };
 
-
     fetchUserData();
 
   }, []);
@@ -42,7 +41,9 @@ export default function FinancesScreen({ navigation }) {
       
       const data = await response.json();
       setTransactions(data);
-    }  finally {
+    } catch (error) {
+      console.error('Failed to fetch transactions:', error);
+    } finally {
       setLoading(false);
     }
   };
@@ -79,7 +80,6 @@ export default function FinancesScreen({ navigation }) {
 
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
-
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
       <View style={styles.overlay}>
@@ -100,7 +100,7 @@ export default function FinancesScreen({ navigation }) {
           <View style={styles.buttonContainer}>
             <Button
               title="Input New Data"
-              onPress={() => navigation.navigate('InputData')} // Update this line
+              onPress={() => navigation.navigate('InputData', { refreshTransactions: fetchTransactions })}
               color="#080"
             />
           </View>

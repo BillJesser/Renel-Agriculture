@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IpContext } from '../IpContext'; // Import the context
+import { IpContext } from '../IpContext'; 
 
-
-export default function InputDataScreen({ navigation }) {
+export default function InputDataScreen({ navigation, route }) {
   const [formData, setFormData] = useState({
     memberId: '',
     memberName: '',
@@ -22,6 +21,7 @@ export default function InputDataScreen({ navigation }) {
     remarks: ''
   });
   const ip = useContext(IpContext); // Access the IP address
+  const { refreshTransactions } = route.params; // Extract the refreshTransactions callback
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -47,7 +47,6 @@ export default function InputDataScreen({ navigation }) {
     setFormData({ ...formData, [name]: value });
   };
 
-
   const handleSubmit = async () => {
     try {
       const response = await fetch(`http://${ip}/insert`, {
@@ -60,8 +59,9 @@ export default function InputDataScreen({ navigation }) {
 
       if (response.ok) {
         const result = await response.json();
-        Alert.alert("Success", `Data inserted with id: ${result.inserted_id}`);
+        Alert.alert("Success", `Data inserted`);
         navigation.goBack();
+        refreshTransactions(formData.memberId); // Trigger refresh of transactions on Finance screen
       } else {
         Alert.alert("Error", "Failed to insert data");
       }
@@ -84,7 +84,6 @@ export default function InputDataScreen({ navigation }) {
             onChangeText={(value) => handleChange(key, value)}
             placeholder={key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''}
             editable={!(key === 'memberId' || key === 'memberName')}
-
           />
         </View>
       ))}
@@ -119,4 +118,4 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 20,
   },
-})
+});
