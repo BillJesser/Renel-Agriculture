@@ -10,7 +10,9 @@ const EditUser = () => {
   const handleSearch = (text) => {
     setQuery(text);
     if (text.length > 0) {
-      fetch(`http://192.168.0.6:5000/search_user?query=${text}`)
+
+      fetch(`http://192.168.5.249:5000/search_user?query=${text}`)
+
         .then(response => response.json())
         .then(data => setUsers(data))
         .catch(error => {

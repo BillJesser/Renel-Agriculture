@@ -7,10 +7,12 @@ import * as FileSystem from 'expo-file-system';
 
 // Your component to render the embedded file and buttons
 const GoogleDriveEmbed = () => {
-  const fileId = '1DajcONE5gcn8G5TEej7Hu84TaDTXlQTx';  // Replace with your actual file ID
+  const fileId = '1DajcONE5gcn8G5TEej7Hu84TaDTXlQTx'; // Replace with your actual file ID
   const fileUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+
   const download = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
+
 
   // Embed HTML for Google Drive file preview
   const embedHtml = `
@@ -44,7 +46,6 @@ const GoogleDriveEmbed = () => {
       );
 
       const { uri } = await downloadResumable.downloadAsync();
-
       const canShare = await Sharing.isAvailableAsync();
       if (canShare) {
         await Sharing.shareAsync(uri);
@@ -64,8 +65,16 @@ const GoogleDriveEmbed = () => {
         style={styles.webview}
       />
       <View style={styles.buttonContainer}>
-        <Button title="Download File" onPress={handleDownload} />
-        <Button title="Share File" onPress={handleShare} />
+        <Button
+          title="Download File"
+          onPress={handleDownload}
+          color="#080" // Green color
+        />
+        <Button
+          title="Share File"
+          onPress={handleShare}
+          color="#080" // Green color
+        />
       </View>
     </SafeAreaView>
   );
