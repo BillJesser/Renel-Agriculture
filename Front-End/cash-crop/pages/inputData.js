@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, ScrollView, Alert } from 'react-native';
 
 export default function InputDataScreen({ navigation }) {
   const [formData, setFormData] = useState({
@@ -23,10 +23,27 @@ export default function InputDataScreen({ navigation }) {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
-    console.log(formData);
-    navigation.goBack();
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('http://192.168.5.242:5000/insert', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        Alert.alert("Success", `Data inserted with id: ${result.inserted_id}`);
+        navigation.goBack();
+      } else {
+        Alert.alert("Error", "Failed to insert data");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "An error occurred");
+    }
   };
 
   return (
@@ -38,9 +55,7 @@ export default function InputDataScreen({ navigation }) {
             style={styles.input}
             value={formData[key]}
             onChangeText={(value) => handleChange(key, value)}
-            placeholder={
-              key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''
-            }
+            placeholder={key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''}
           />
         </View>
       ))}
