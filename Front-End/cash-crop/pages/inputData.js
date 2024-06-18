@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IpContext } from '../IpContext'; 
 
-export default function InputDataScreen({ navigation }) {
+export default function InputDataScreen({ navigation, route }) {
   const [formData, setFormData] = useState({
     memberId: '',
     memberName: '',
@@ -19,6 +20,8 @@ export default function InputDataScreen({ navigation }) {
     purposeOfLoan: '',
     remarks: ''
   });
+  const ip = useContext(IpContext); // Access the IP address
+  const { refreshTransactions } = route.params; // Extract the refreshTransactions callback
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -44,10 +47,28 @@ export default function InputDataScreen({ navigation }) {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
-    console.log(formData);
-    navigation.goBack(); // or navigate to another screen after submission
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`http://${ip}/insert`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        Alert.alert("Success", `Data inserted`);
+        navigation.goBack();
+        refreshTransactions(formData.memberId); // Trigger refresh of transactions on Finance screen
+      } else {
+        Alert.alert("Error", "Failed to insert data");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "An error occurred");
+    }
   };
 
   return (
@@ -97,4 +118,4 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 20,
   },
-})
+});

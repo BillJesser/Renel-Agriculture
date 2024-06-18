@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { IpContext } from '../IpContext'; // Import the context
 
 const EditUser = () => {
   const [query, setQuery] = useState('');
   const [users, setUsers] = useState([]);
   const navigation = useNavigation();
+  const ip = useContext(IpContext); // Access the IP address
 
   const handleSearch = (text) => {
     setQuery(text);
     if (text.length > 0) {
-
-      fetch(`http://192.168.5.249:5000/search_user?query=${text}`)
-
+      fetch(`http://${ip}/search_user?query=${text}`)
         .then(response => response.json())
         .then(data => setUsers(data))
         .catch(error => {

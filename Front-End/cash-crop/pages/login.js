@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, ImageBackground, Image, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import { IpContext } from '../IpContext'; // Import the context
 
 const farmerImage = require('../assets/farmer1.jpeg');
 const renelImage = require('../assets/renellogo.png');
@@ -11,7 +11,7 @@ export default function HomeScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [memberId, setMemberId] = useState('');
   const [loading, setLoading] = useState(false);
-  const [ip, setIp] = useState('');
+  const ip = useContext(IpContext); // Access the IP address
 
   useFocusEffect(
     React.useCallback(() => {
@@ -19,18 +19,6 @@ export default function HomeScreen({ navigation }) {
       setMemberId('');
     }, [])
   );
-
-  useEffect(() => {
-    // Fetch and log the local IP address
-    axios.get('https://api.ipify.org?format=json')
-      .then(response => {
-        console.log('Local IPv4 Address:', response.data.ip);
-        setIp(response.data.ip);
-      })
-      .catch(error => {
-        console.error('Error fetching IP address:', error);
-      });
-  }, []);
 
   const handleLogin = async () => {
     if (!password || !memberId) {
@@ -41,9 +29,7 @@ export default function HomeScreen({ navigation }) {
     setLoading(true);
 
     try {
-
-      const response = await fetch(`http://192.168.5.249:5000/login`, {
-
+      const response = await fetch(`http://${ip}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +74,7 @@ export default function HomeScreen({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Member ID" // New Member ID input
+          placeholder="Member ID"
           placeholderTextColor="#888"
           value={memberId}
           onChangeText={text => setMemberId(text)}
