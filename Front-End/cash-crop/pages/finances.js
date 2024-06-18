@@ -6,9 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function FinancesScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [memberID, setMemberID] = useState('');
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -24,6 +23,7 @@ export default function FinancesScreen({ navigation }) {
         }
       } catch (error) {
         console.error('Failed to load user data:', error);
+        setLoading(false);
       }
     };
 
@@ -33,33 +33,13 @@ export default function FinancesScreen({ navigation }) {
   const fetchTransactions = async (memberID) => {
     try {
       const response = await fetch(`http://192.168.5.241:5000/user_transactions?member_id=${memberID}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+      
       const data = await response.json();
       setTransactions(data);
-      setLoading(false);
-    } catch (error) {
-      setError('Error fetching data. Please try again.');
+    }  finally {
       setLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>Error: {error}</Text>
-      </View>
-    );
-  }
 
   const tableHead = [
     'Transaction Dates', 
@@ -76,20 +56,20 @@ export default function FinancesScreen({ navigation }) {
     'Remarks'
   ];
 
-  const tableData = transactions.transaction_dates.map((_, index) => [
-    transactions.transaction_dates[index],
-    transactions.saving_contributions[index],
-    transactions.cumulative_savings[index],
-    transactions.loan_amount[index],
-    transactions.loan_date[index],
-    transactions.repaymentDueDate[index],
-    transactions.loanRepayment[index],
-    transactions.outstandingLoanBalance[index],
-    transactions.interestPaid[index],
-    transactions.dividend[index],
-    transactions.purposeOfLoan[index],
-    transactions.remarks[index]
-  ]);
+  const tableData = transactions && transactions.transaction_dates ? transactions.transaction_dates.map((_, index) => [
+    transactions.transaction_dates[index] || '',
+    transactions.saving_contributions[index] || '',
+    transactions.cumulative_savings[index] || '',
+    transactions.loan_amount[index] || '',
+    transactions.loan_date[index] || '',
+    transactions.repaymentDueDate[index] || '',
+    transactions.loanRepayment[index] || '',
+    transactions.outstandingLoanBalance[index] || '',
+    transactions.interestPaid[index] || '',
+    transactions.dividend[index] || '',
+    transactions.purposeOfLoan[index] || '',
+    transactions.remarks[index] || ''
+  ]) : [['', '', '', '', '', '', '', '', '', '', '', '']]; // Single empty row if no data
 
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
