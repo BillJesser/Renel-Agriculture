@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 
 const AccountInfo = ({ route, navigation }) => {
   const { memberID, username } = route.params;
@@ -7,19 +7,22 @@ const AccountInfo = ({ route, navigation }) => {
   const [memberIDInput, setMemberIDInput] = useState(memberID);
   const [usernameInput, setUsernameInput] = useState(username);
   const [passwordInput, setPasswordInput] = useState('');
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
 
   const handleSave = () => {
-    // Save the updated information
-    console.log('Updated Info:', { memberID: memberIDInput, username: usernameInput, password: passwordInput });
-    // Here you would typically make an API call to save the updated user information
+    if (passwordInput !== confirmPasswordInput) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
 
-    // After saving, navigate back or show a success message
+    console.log('Updated Info:', { memberID: memberIDInput, username: usernameInput, password: passwordInput });
+
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <Text>Update Member Information</Text>
+      <Text style={styles.title}>Update Member Information</Text>
       <TextInput
         style={styles.input}
         value={memberIDInput}
@@ -39,6 +42,13 @@ const AccountInfo = ({ route, navigation }) => {
         placeholder="Update Password"
         secureTextEntry
       />
+      <TextInput
+        style={styles.input}
+        value={confirmPasswordInput}
+        onChangeText={setConfirmPasswordInput}
+        placeholder="Confirm Password"
+        secureTextEntry
+      />
       <Button title="Save" onPress={handleSave} />
     </View>
   );
@@ -49,6 +59,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
   input: {
     height: 40,
     borderColor: 'gray',
@@ -58,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccountInfo
+export default AccountInfo;

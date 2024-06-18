@@ -13,9 +13,6 @@ def hash_function(password):
 
 def register_user(username, memberID, password):
 
-    if users.find_one({"username": username}):
-        return False
-    
     if users.find_one({"memberID": memberID}):
         return False
 
@@ -33,9 +30,6 @@ def register_user(username, memberID, password):
     return True
 
 def register_admin(username, adminID, password):
-
-    if users.find_one({"username": username}):
-        return False
     
     if users.find_one({"memberID": adminID}):
         return False
@@ -53,9 +47,9 @@ def register_admin(username, adminID, password):
     users.insert_one(user_data)
     return True
 
-def login(username, password):
+def login(password, memberId):
     # Search database for user
-    user = users.find_one({"username": username})
+    user = users.find_one({"memberID": memberId})
     # Check if username and password match
     if user:
         hashpass = user["password"]
