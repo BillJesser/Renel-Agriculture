@@ -27,7 +27,7 @@ const AccountInfo = ({ route, navigation }) => {
     }
 
     try {
-      const response = await fetch('http://192.168.5.241:5000/update_user', {
+      const response = await fetch('http://192.168.1.64:5000/update_user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,6 +49,41 @@ const AccountInfo = ({ route, navigation }) => {
       console.error('Error:', error);
       Alert.alert('Error', 'Failed to update information');
     }
+  };
+
+  const handleDelete = async () => {
+    Alert.alert(
+      'Confirm Deletion',
+      'Are you sure you want to delete this user?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const response = await fetch(`http://192.168.1.64:5000/delete_user/${memberID}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+
+              const data = await response.json();
+              if (response.ok) {
+                Alert.alert('Success', data.message);
+                navigation.goBack();
+              } else {
+                Alert.alert('Error', data.error || 'Failed to delete user');
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              Alert.alert('Error', 'Failed to delete user');
+            }
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -82,6 +117,9 @@ const AccountInfo = ({ route, navigation }) => {
         secureTextEntry
       />
       <Button title="Save" onPress={handleSave} />
+      <View style={styles.deleteButtonContainer}>
+        <Button title="Delete User" color="red" onPress={handleDelete} />
+      </View>
     </View>
   );
 };
@@ -102,6 +140,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+  },
+  deleteButtonContainer: {
+    marginTop: 16,
   },
 });
 

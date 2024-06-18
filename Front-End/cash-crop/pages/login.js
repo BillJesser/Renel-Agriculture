@@ -101,7 +101,7 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('LoginTutorial')}>
-          <Text style={styles.tutorial}>Login Tutorials</Text>
+          <Text style={styles.tutorial}>Login Tutorial</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

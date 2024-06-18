@@ -20,6 +20,8 @@ import AccountInfo from './pages/accountInfo';
 import InputData from './pages/inputData';
 import { IpProvider } from './IpContext';
 import LoginTutorials from './pages/loginTutorial';
+import UserTutorial from './pages/userTutorial';
+import AdminTutorial from './pages/adminTutorial';
 
 
 const Stack = createStackNavigator();
@@ -48,6 +50,8 @@ export default function App() {
           <Stack.Screen name="AccountInfo" component={AccountInfo} options={{ title: 'Account Info' }} />
           <Stack.Screen name="LoginTutorial" component={LoginTutorials} options={{ title: 'Login Tutorial' }} />
           <Stack.Screen name="InputData" component={InputData} options={{ title: 'Input Data' }} />
+          <Stack.Screen name="UserTutorial" component={UserTutorial} options={{ title: 'User Tutorial' }} />
+          <Stack.Screen name="AdminTutorial" component={AdminTutorial} options={{ title: 'Admin Tutorial' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </IpProvider>
