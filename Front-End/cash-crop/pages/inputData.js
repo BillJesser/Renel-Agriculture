@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView, Alert } from 'react-native';
+
+import { StyleSheet, Text, View, TextInput, Button, ScrollView, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IpContext } from '../IpContext'; 
+import { IpContext } from '../IpContext';
+
+const backgroundImage = require('../assets/farmer1.jpeg');
+
 
 export default function InputDataScreen({ navigation, route }) {
   const [formData, setFormData] = useState({
@@ -72,32 +76,41 @@ export default function InputDataScreen({ navigation, route }) {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {Object.keys(formData).map((key) => (
-        <View key={key} style={styles.inputContainer}>
-          <Text style={styles.label}>
-            {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-          </Text>
-          <TextInput
-            style={[styles.input, (key === 'memberId' || key === 'memberName') && styles.readOnlyInput]}
-            value={formData[key]}
-            onChangeText={(value) => handleChange(key, value)}
-            placeholder={key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''}
-            editable={!(key === 'memberId' || key === 'memberName')}
-          />
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {Object.keys(formData).map((key) => (
+          <View key={key} style={styles.inputContainer}>
+            <Text style={styles.label}>
+              {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+            </Text>
+            <TextInput
+              style={[styles.input, (key === 'memberId' || key === 'memberName') && styles.readOnlyInput]}
+              value={formData[key]}
+              onChangeText={(value) => handleChange(key, value)}
+              placeholder={key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''}
+              editable={!(key === 'memberId' || key === 'memberName')}
+            />
+          </View>
+        ))}
+        <View style={styles.buttonContainer}>
+          <Button title="Submit" onPress={handleSubmit} color="#4CAF50" />
         </View>
-      ))}
-      <View style={styles.buttonContainer}>
-        <Button title="Submit" onPress={handleSubmit} />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // or 'stretch'
+  },
+  imageOpacity: {
+    opacity: 1,
+  },
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Light background to avoid overlapping with text
   },
   inputContainer: {
     marginBottom: 15,
@@ -111,11 +124,13 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: 10,
     borderRadius: 5,
+    backgroundColor: '#fff', // Ensure input box is white over the background
   },
   readOnlyInput: {
-    backgroundColor: '#f0f0f0', 
+    backgroundColor: '#f0f0f0',
   },
   buttonContainer: {
     marginTop: 20,
   },
 });
+
