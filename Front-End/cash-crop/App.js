@@ -22,10 +22,10 @@ import { IpProvider } from './IpContext';
 import LoginTutorials from './pages/loginTutorial';
 import UserTutorial from './pages/userTutorial';
 import AdminTutorial from './pages/adminTutorial';
-
+import AdminInputData from './pages/adminInputData';
 
 const Stack = createStackNavigator();
-const ipAddress = '192.168.1.170:5000';
+const ipAddress = '192.168.0.3:5000';  
 
 export default function App() {
   return (
@@ -52,6 +52,7 @@ export default function App() {
           <Stack.Screen name="InputData" component={InputData} options={{ title: 'Input Data' }} />
           <Stack.Screen name="UserTutorial" component={UserTutorial} options={{ title: 'User Tutorial' }} />
           <Stack.Screen name="AdminTutorial" component={AdminTutorial} options={{ title: 'Admin Tutorial' }} />
+          <Stack.Screen name="AdminInputData" component={AdminInputData} options={{ title: 'Admin Input Data' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </IpProvider>

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ImageBackground } from 'react-native';
+import { IpContext } from '../IpContext'; // Import the context
 
 const backgroundImage = require('../assets/farmer1.jpeg');
 
@@ -11,6 +12,7 @@ const AccountInfo = ({ route, navigation }) => {
   const [passwordInput, setPasswordInput] = useState('');
   const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
   const [error, setError] = useState('');
+  const ip = useContext(IpContext);
 
   const handleSave = async () => {
     if (passwordInput !== confirmPasswordInput) {
@@ -25,7 +27,7 @@ const AccountInfo = ({ route, navigation }) => {
     };
 
     try {
-      const response = await fetch('http://192.168.1.64:5000/update_user', {
+      const response = await fetch(`http://${ip}/update_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +61,7 @@ const AccountInfo = ({ route, navigation }) => {
           style: 'destructive',
           onPress: async () => {
             try {
-              const response = await fetch(`http://192.168.1.64:5000/delete_user/${memberID}`, {
+              const response = await fetch(`http:///${ip}/delete_user/${memberID}`, {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',

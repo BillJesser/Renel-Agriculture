@@ -1,36 +1,47 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, ScrollView, StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
-import { IpContext } from '../IpContext'; // Import the context;
+import { IpContext } from '../IpContext';
 
 const backgroundImage = require('../assets/farmer1.jpeg');
 
-const UserTransactions = ({ route }) => {
-  const { memberID, username } = route.params;
-  const [transactions, setTransactions] = useState([]);
+export default function FinancesScreen({ navigation, route }) {
+  const { username, memberID } = route.params; // Extract username and memberID from route params
+  const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const ip = useContext(IpContext); // Access the IP address
+  const ip = useContext(IpContext);
 
   useEffect(() => {
     if (memberID) {
-      fetch(`http://${ip}/user_transactions?member_id=${memberID}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setTransactions(data);
-          setLoading(false);
-        })
-        .catch(error => {
-          setError('Error fetching data. Please try again.');
-          setLoading(false);
-        });
+      fetchTransactions(memberID);
     }
   }, [memberID]);
+
+  const fetchTransactions = async (memberID) => {
+    try {
+      const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
+      const data = await response.json();
+      setTransactions(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Failed to fetch transactions:', error);
+      setError('Error fetching data. Please try again.');
+      setLoading(false);
+    }
+  };
+
+  const handleInputNewData = () => {
+    navigation.navigate('AdminInputData', { memberID: memberID, username: username, refreshTransactions: fetchTransactions });
+  };
+
+  const handlePrintPaper = () => {
+    alert('Print Paper pressed');
+  };
+
+  const handleEditData = () => {
+    alert('Edit Data pressed');
+  };
 
   if (loading) {
     return (
@@ -63,20 +74,22 @@ const UserTransactions = ({ route }) => {
     'Remarks'
   ];
 
-  const tableData = transactions.transaction_dates.map((_, index) => [
-    transactions.transaction_dates[index],
-    transactions.saving_contributions[index],
-    transactions.cumulative_savings[index],
-    transactions.loan_amount[index],
-    transactions.loan_date[index],
-    transactions.repaymentDueDate[index],
-    transactions.loanRepayment[index],
-    transactions.outstandingLoanBalance[index],
-    transactions.interestPaid[index],
-    transactions.dividend[index],
-    transactions.purposeOfLoan[index],
-    transactions.remarks[index]
-  ]);
+  // Render an empty row if transactions are empty or null
+  const tableData = transactions && transactions.transaction_dates && transactions.transaction_dates.length > 0 ?
+    transactions.transaction_dates.map((_, index) => [
+      transactions.transaction_dates[index] || '',
+      transactions.saving_contributions[index] || '',
+      transactions.cumulative_savings[index] || '',
+      transactions.loan_amount[index] || '',
+      transactions.loan_date[index] || '',
+      transactions.repaymentDueDate[index] || '',
+      transactions.loanRepayment[index] || '',
+      transactions.outstandingLoanBalance[index] || '',
+      transactions.interestPaid[index] || '',
+      transactions.dividend[index] || '',
+      transactions.purposeOfLoan[index] || '',
+      transactions.remarks[index] || ''
+    ]) : [['', '', '', '', '', '', '', '', '', '', '', '']]; // Show message if no data
 
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
@@ -88,25 +101,45 @@ const UserTransactions = ({ route }) => {
           <Text style={styles.heading}>Member Name: {username}</Text>
           <Text style={styles.heading}>User ID: {memberID}</Text>
         </View>
-
+  
         {/* Scrollable Table */}
         <ScrollView horizontal>
           <ScrollView contentContainerStyle={styles.tableContainer}>
-            <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-              <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
-              <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
-            </Table>
+            {transactions && transactions.transaction_dates && transactions.transaction_dates.length > 0 ? (
+              <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+                <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
+                <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
+              </Table>
+            ) : (
+              <Text style={styles.text}>No data available, please input data.</Text>
+            )}
           </ScrollView>
         </ScrollView>
+  
+        {/* Buttons */}
+        <View style={styles.buttonsContainer}>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={styles.button} onPress={handleInputNewData}>
+              <Text style={styles.buttonText}>Input New Data</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleEditData}>
+              <Text style={styles.buttonText}>Edit Data</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.buttonSingle} onPress={handlePrintPaper}>
+            <Text style={styles.buttonText}>Print Paper</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ImageBackground>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+    paddingBottom: 40, // Added padding to the bottom to create space below buttons
   },
   backgroundImage: {
     flex: 1,
@@ -137,6 +170,35 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
   },
+  buttonsContainer: {
+    marginTop: 20, // Increased margin to move the buttons higher
+    alignItems: 'center',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: 10,
+    paddingHorizontal: 20, // Add padding to ensure the buttons don't touch the sides
+  },
+  button: {
+    backgroundColor: '#080',
+    paddingVertical: 10, // Reduced vertical padding
+    paddingHorizontal: 30, // Reduced horizontal padding
+    borderRadius: 5,
+    marginHorizontal: 10,
+  },
+  buttonSingle: {
+    backgroundColor: '#080',
+    paddingVertical: 10, // Reduced vertical padding
+    paddingHorizontal: 30, // Reduced horizontal padding
+    borderRadius: 5,
+    marginTop: 10, // Added margin to separate it from the row above
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14, // Slightly smaller font size
+    textAlign: 'center',
+  },
 });
-
-export default UserTransactions;

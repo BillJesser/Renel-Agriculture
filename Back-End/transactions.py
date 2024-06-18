@@ -71,27 +71,24 @@ def insert_data(form_data):
             return {"status": "error", "message": str(e)}
 
 # Sample data to be inserted
-sample_data = {
-    "memberId": "M123",
-    "memberName": "John Doe",
-    "transactionDate": "2024-06-18",
-    "savingsContribution": 1000.00,
-    "cumulativeSavings": 5000.00,
-    "loanAmount": 2000.00,
-    "loanDate": "2024-06-01",
-    "repaymentDueDate": "2024-12-01",
-    "loanRepayment": 500.00,
-    "outstandingLoanBalance": 1500.00,
-    "interestPaid": 50.00,
-    "dividend": 10.00,
-    "purposeOfLoan": "Business Expansion",
-    "remarks": "First loan installment"
-}
+# sample_data = {
+#     "memberId": "M123",
+#     "memberName": "John Doe",
+#     "transactionDate": "2024-06-18",
+#     "savingsContribution": 1000.00,
+#     "cumulativeSavings": 5000.00,
+#     "loanAmount": 2000.00,
+#     "loanDate": "2024-06-01",
+#     "repaymentDueDate": "2024-12-01",
+#     "loanRepayment": 500.00,
+#     "outstandingLoanBalance": 1500.00,
+#     "interestPaid": 50.00,
+#     "dividend": 10.00,
+#     "purposeOfLoan": "Business Expansion",
+#     "remarks": "First loan installment"
+# }
 
 # Calling the insert_data function and printing the result
-print(insert_data(sample_data))
 
 # Verifying the inserted data
-print("Verifying the inserted data:")
-inserted_data = transactions.find_one({"member_id": "M123"})
-print(inserted_data)
+

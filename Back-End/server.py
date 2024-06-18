@@ -145,6 +145,9 @@ def update_user():
         try:
             if new_username:
                 existing_user['username'] = new_username
+                transaction_name = transactions.find_one({'member_id': memberID})
+                transaction_name['member_name'] = new_username
+                transactions.update_one({'member_id': memberID}, {'$set': transaction_name})
 
             if new_password:
                 hash_pass = hash_function(new_password)
@@ -152,6 +155,7 @@ def update_user():
 
            
             users.update_one({'memberID': memberID}, {'$set': existing_user})
+           
 
             # Prepare response
             response_data = {'message': 'User information updated successfully'}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IpContext } from '../IpContext'; 
@@ -38,9 +38,7 @@ export default function FinancesScreen({ navigation }) {
   const fetchTransactions = async (memberID) => {
     try {
       const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+  
       const data = await response.json();
       setTransactions(data);
       setLoading(false);
@@ -94,20 +92,21 @@ export default function FinancesScreen({ navigation }) {
     'Remarks'
   ];
 
-  const tableData = transactions && transactions.transaction_dates ? transactions.transaction_dates.map((_, index) => [
-    transactions.transaction_dates[index] || '',
-    transactions.saving_contributions[index] || '',
-    transactions.cumulative_savings[index] || '',
-    transactions.loan_amount[index] || '',
-    transactions.loan_date[index] || '',
-    transactions.repaymentDueDate[index] || '',
-    transactions.loanRepayment[index] || '',
-    transactions.outstandingLoanBalance[index] || '',
-    transactions.interestPaid[index] || '',
-    transactions.dividend[index] || '',
-    transactions.purposeOfLoan[index] || '',
-    transactions.remarks[index] || ''
-  ]) : [['', '', '', '', '', '', '', '', '', '', '', '']]; // Single empty row if no data
+  const tableData = transactions && transactions.transaction_dates && transactions.transaction_dates.length > 0 ?
+    transactions.transaction_dates.map((_, index) => [
+      transactions.transaction_dates[index] || '',
+      transactions.saving_contributions[index] || '',
+      transactions.cumulative_savings[index] || '',
+      transactions.loan_amount[index] || '',
+      transactions.loan_date[index] || '',
+      transactions.repaymentDueDate[index] || '',
+      transactions.loanRepayment[index] || '',
+      transactions.outstandingLoanBalance[index] || '',
+      transactions.interestPaid[index] || '',
+      transactions.dividend[index] || '',
+      transactions.purposeOfLoan[index] || '',
+      transactions.remarks[index] || ''
+    ]) : [['', '', '', '', '', '', '', '', '', '', '', '']]; // Single empty row if no data
 
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
@@ -119,17 +118,21 @@ export default function FinancesScreen({ navigation }) {
           <Text style={styles.heading}>Member Name: {username}</Text>
           <Text style={styles.heading}>User ID: {memberID}</Text>
         </View>
-
+  
         {/* Scrollable Table */}
         <ScrollView horizontal>
           <ScrollView contentContainerStyle={styles.tableContainer}>
-            <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-              <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
-              <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
-            </Table>
+            {transactions && transactions.transaction_dates && transactions.transaction_dates.length > 0 ? (
+              <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+                <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
+                <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
+              </Table>
+            ) : (
+              <Text style={styles.text}>No data available, please input data.</Text>
+            )}
           </ScrollView>
         </ScrollView>
-
+  
         {/* Buttons */}
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonRow}>
