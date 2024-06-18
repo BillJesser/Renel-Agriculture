@@ -16,7 +16,7 @@ const AccountInfo = ({ route, navigation }) => {
     }
 
     console.log('Updated Info:', { memberID: memberIDInput, username: usernameInput, password: passwordInput });
-  
+
     navigation.goBack();
   };
 

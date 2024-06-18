@@ -1,78 +1,88 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button, ImageBackground } from 'react-native';
 
+const backgroundImage = require('../assets/farmer1.jpeg');
 const financeImage = require('../assets/finances.png');
 const tutorialsImage = require('../assets/corn.png');
 
 export default function DashboardScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>₵ash Crop</Text>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
+      <View style={styles.overlay}>
+        <Text style={styles.title}>₵ash Crop</Text>
 
-      <View style={styles.buttonRow}>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Finances')}>
-          <View style={styles.buttonContent}>
+          <View style={[styles.buttonContent, styles.buttonOutline]}>
             <Image source={financeImage} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Finances</Text>
           </View>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Tutorials')}>
-          <View style={styles.buttonContent}>
+          <View style={[styles.buttonContent, styles.buttonOutline]}>
             <Image source={tutorialsImage} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Tutorials</Text>
           </View>
         </TouchableOpacity>
-      </View>
 
-      <View style={styles.logoutButtonContainer}>
-        <Button title="Logout" onPress={() => navigation.navigate('Home')} />
+        <View style={styles.logoutButtonContainer}>
+          <Button title="Logout" onPress={() => navigation.navigate('Home')} color="#080" />
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageOpacity: {
+    opacity: 0.5,
+  },
+  overlay: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   title: {
     fontSize: 40,
     fontWeight: 'bold',
-    marginBottom: 100,
+    marginBottom: 40,
     color: '#080',
   },
-  buttonRow: {
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
   buttonContainer: {
-    flex: 1,
-    marginHorizontal: 10,
+    width: '80%',
+    marginVertical: 10,
     alignItems: 'center',
   },
   buttonContent: {
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+  },
+  buttonOutline: {
     borderWidth: 2,
     borderColor: '#080',
-    borderRadius: 10,
-    padding: 10,
   },
   buttonImage: {
     width: 150,
     height: 100,
-    marginBottom: 10, // space between image and text
+    marginBottom: 10,
   },
   buttonText: {
     fontSize: 16,
     textAlign: 'center',
+    color: '#080',
   },
   logoutButtonContainer: {
-    width: '100%',
-    marginTop: 20,
-    alignItems: 'center', // center align the logout button
+    width: '80%',
+    marginTop: 40,
   },
 });

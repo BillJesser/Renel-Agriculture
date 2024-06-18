@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, ImageBackground } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const backgroundImage = require('../assets/farmer1.jpeg');
 
 export default function FinancesScreen({ navigation }) {
   const [username, setUsername] = useState('');
@@ -12,74 +14,81 @@ export default function FinancesScreen({ navigation }) {
         const storedUsername = await AsyncStorage.getItem('username');
         if (storedUsername !== null) {
           setUsername(storedUsername);
-        } 
+        }
       } catch (error) {
         console.error('Failed to load username:', error);
       }
     };
-
     fetchUsername();
   }, []);
 
   const tableHead = [
-    'Date', 'Savings', 'Cumulative', 'Loan', 
-    'Loan Date', 'Repayment Due', 'Repayment', 'Outstanding', 
+    'Date', 'Savings', 'Cumulative', 'Loan',
+    'Loan Date', 'Repayment Due', 'Repayment', 'Outstanding',
     'Interest', 'Dividend', 'Purpose', 'Remarks'
   ];
-
   const tableData = [
     ['2024-06-01', '$500', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
     ['2024-06-01', '$100000', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
   ];
-
   const widthArr = [80, 80, 100, 80, 100, 120, 100, 100, 80, 80, 100, 100];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.memberName}>Client: {username}</Text>
-      <View style={styles.header}>
-        <Text style={styles.title}>₵ash Crop</Text>
-      </View>
-      <Text style={styles.subtitle}>Finances</Text>
-
-      <ScrollView horizontal style={styles.chartContainer}>
-        <View>
-          <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-            <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
-            <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
-          </Table>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
+      <View style={styles.overlay}>
+        <Text style={styles.memberName}>Client: {username}</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>₵ash Crop</Text>
         </View>
-      </ScrollView>
-
-      <View style={styles.buttonRow}>
-        <View style={styles.buttonContainer}>
+        <Text style={styles.subtitle}>Finances</Text>
+        <ScrollView horizontal style={styles.chartContainer}>
+          <View>
+            <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+              <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
+              <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
+            </Table>
+          </View>
+        </ScrollView>
+        <View style={styles.buttonRow}>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Input New Data"
+              onPress={() => navigation.navigate('InputData')} // Update this line
+              color="#080"
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Print Paper"
+              onPress={() => alert('Print Paper pressed')}
+              color="#080"
+            />
+          </View>
+        </View>
+        <View style={styles.singleButtonContainer}>
           <Button
-            title="Input New Data"
-            onPress={() => navigation.navigate('InputData')}
+            title="Finance Tutorial"
+            onPress={() => alert('Finance Tutorial pressed')}
+            color="#080"
           />
         </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Print Paper"
-            onPress={() => alert('Print Paper pressed')}
-          />
-        </View>
       </View>
-
-      <View style={styles.singleButtonContainer}>
-        <Button
-          title="Finance Tutorial"
-          onPress={() => alert('Finance Tutorial pressed')}
-        />
-      </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageOpacity: {
+    opacity: 0.3,
+  },
+  overlay: {
+    flex: 1,
+    width: '100%',
     alignItems: 'center',
     padding: 20,
   },
@@ -109,11 +118,11 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 20,
   },
-  head: { 
-    height: 40, 
+  head: {
+    height: 40,
     backgroundColor: '#f1f8ff',
   },
-  text: { 
+  text: {
     margin: 6,
     textAlign: 'center',
     fontSize: 12,

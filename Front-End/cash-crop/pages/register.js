@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
-import * as Network from "expo-network";
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ImageBackground, Image, ActivityIndicator } from 'react-native';
+
+const farmerImage = require('../assets/farmer1.jpeg');
+const renelImage = require('../assets/renellogo.png');
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [memberId, setMemberId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
     if (!username || !memberId || !password) {
@@ -25,8 +27,12 @@ export default function RegisterScreen({ navigation }) {
       return;
     }
 
+    setLoading(true);
+
     try {
-      const response = await fetch('http://192.168.1.65:5000/register', {
+
+      const response = await fetch('http://192.168.5.249:5000/register', {
+
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,6 +41,8 @@ export default function RegisterScreen({ navigation }) {
       });
 
       const data = await response.json();
+      setLoading(false);
+
       if (response.ok) {
         alert(data.message);
         navigation.navigate('Home');
@@ -42,73 +50,96 @@ export default function RegisterScreen({ navigation }) {
         alert(data.error);
       }
     } catch (error) {
+      setLoading(false);
       console.error("An error occurred during registration:", error);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
-      <Text style={styles.subtitle}>Create a new account</Text>
+    <ImageBackground
+      source={farmerImage}
+      style={styles.backgroundImage}
+      imageStyle={styles.imageOpacity}
+    >
+      <View style={styles.overlay}>
+        <Image source={renelImage} style={styles.logo} />
+        <Text style={styles.title}>Register</Text>
+        <Text style={styles.subtitle}>Create a new account</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        placeholderTextColor="#888"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Member ID"
-        placeholderTextColor="#888"
-        value={memberId}
-        onChangeText={setMemberId}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#888"
-        secureTextEntry
-        value={password}
-        on
-jsx
-Copy code
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        placeholderTextColor="#888"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          placeholderTextColor="#888"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Member ID"
+          placeholderTextColor="#888"
+          value={memberId}
+          onChangeText={setMemberId}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#888"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          placeholderTextColor="#888"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
 
-      <Button
-        title="Register"
-        onPress={handleRegister}
-      />
-    </View>
+        {loading ? (
+          <ActivityIndicator size="large" color="#080" />
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageOpacity: {
+    opacity: 0.25, // Increase the opacity value to make the background image more faded
+  },
+  overlay: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
+  },
+  logo: {
+    width: 270,
+    height: 270,
+    resizeMode: 'contain',
+    marginBottom: 40,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#080', // Green color for the title
   },
   subtitle: {
     fontSize: 20,
-    color: '#888',
+    color: '#080', // Green color for the subtitle
     marginBottom: 20,
   },
   input: {
@@ -119,5 +150,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: '100%',
     marginBottom: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  button: {
+    backgroundColor: '#080', // Green color for the button
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 15,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });

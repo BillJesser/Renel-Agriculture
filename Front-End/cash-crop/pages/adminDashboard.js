@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button, ImageBackground } from 'react-native';
 
+const backgroundImage = require('../assets/farmer1.jpeg');
 const financeImage = require('../assets/finances.png');
 const tutorialsImage = require('../assets/corn.png');
 const manageAccountsImage = require('../assets/settings.jpg');
@@ -8,50 +9,57 @@ const searchDatabaseImage = require('../assets/search.png');
 
 export default function AdminDashboardScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>₵ash Crop</Text>
-
-      <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Finances')}>
-          <View style={styles.buttonContent}>
-            <Image source={financeImage} style={styles.buttonImage} />
-            <Text style={styles.buttonText}>Finances</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Tutorials')}>
-          <View style={styles.buttonContent}>
-            <Image source={tutorialsImage} style={styles.buttonImage} />
-            <Text style={styles.buttonText}>Tutorials</Text>
-          </View>
-        </TouchableOpacity>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
+      <View style={styles.overlay}>
+        <Text style={styles.title}>₵ash Crop</Text>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Finances')}>
+            <View style={styles.buttonContent}>
+              <Image source={financeImage} style={styles.buttonImage} />
+              <Text style={styles.buttonText}>Finances</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Tutorials')}>
+            <View style={styles.buttonContent}>
+              <Image source={tutorialsImage} style={styles.buttonImage} />
+              <Text style={styles.buttonText}>Tutorials</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Search')}>
+            <View style={styles.buttonContent}>
+              <Image source={searchDatabaseImage} style={styles.buttonImage} />
+              <Text style={styles.buttonText}>Search Database</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Manage')}>
+            <View style={styles.buttonContent}>
+              <Image source={manageAccountsImage} style={styles.buttonImage} />
+              <Text style={styles.buttonText}>Manage Accounts</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.logoutButtonContainer}>
+          <Button title="Logout" onPress={() => navigation.navigate('Home')} color="#080" />
+        </View>
       </View>
-
-      <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Search')}>
-          <View style={styles.buttonContent}>
-            <Image source={searchDatabaseImage} style={styles.buttonImage} />
-            <Text style={styles.buttonText}>Search Database</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Manage')}>
-          <View style={styles.buttonContent}>
-            <Image source={manageAccountsImage} style={styles.buttonImage} />
-            <Text style={styles.buttonText}>Manage Accounts</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.logoutButtonContainer}>
-        <Button title="Logout" onPress={() => navigation.navigate('Home')} />
-      </View>
-    </View >
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageOpacity: {
+    opacity: 0.5,
+  },
+  overlay: {
+    flex: 1,
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -59,7 +67,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     fontWeight: 'bold',
-    marginBottom: 100,
+    marginBottom: 20,
     color: '#080',
   },
   buttonRow: {
@@ -73,6 +81,7 @@ const styles = StyleSheet.create({
   },
   buttonContent: {
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderWidth: 2,
     borderColor: '#080',
     borderRadius: 10,
@@ -81,17 +90,16 @@ const styles = StyleSheet.create({
   buttonImage: {
     width: 150,
     height: 100,
-    // resizeMode: 'contain',
-    marginBottom: 10, // space between image and text
+    marginBottom: 10,
   },
   buttonText: {
     fontSize: 16,
     textAlign: 'center',
+    color: '#080',
   },
   logoutButtonContainer: {
     width: '100%',
     marginTop: 20,
-    alignItems: 'center', // center align the logout button
+    alignItems: 'center',
   },
 });
-
