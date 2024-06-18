@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ImageBackground } from 'react-native';
+
+const backgroundImage = require('../assets/farmer1.jpeg');
 
 const AccountInfo = ({ route, navigation }) => {
   const { memberID, username } = route.params;
@@ -28,6 +30,7 @@ const AccountInfo = ({ route, navigation }) => {
         value={memberIDInput}
         onChangeText={setMemberIDInput}
         placeholder="Member ID"
+        editable={false}
       />
       <TextInput
         style={styles.input}
@@ -55,21 +58,39 @@ const AccountInfo = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    padding: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageOpacity: {
+    opacity: 0.3,
+  },
+  overlay: {
+    flex: 1,
+    width: '80%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
   },
   title: {
-    fontSize: 18,
+    fontSize: 36,
     fontWeight: 'bold',
-    marginBottom: 16,
+    color: '#080',
+    marginBottom: 20,
   },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
+    paddingLeft: 8,
+    marginBottom: 16,
+    width: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 16,
   },
 });
 
