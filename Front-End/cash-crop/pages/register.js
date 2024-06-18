@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
-import * as Network from "expo-network";
+import { IpContext } from '../IpContext'; // Import the context
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [memberId, setMemberId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const ip = useContext(IpContext); // Access the IP address
 
 
   const handleRegister = async () => {
@@ -26,7 +27,10 @@ export default function RegisterScreen({ navigation }) {
     }
 
     try {
-      const response = await fetch('http://192.168.1.65:5000/register', {
+      const url = `http://${ip}/register`;
+      console.log(`Fetching from URL: ${url}`);
+
+      const response = await fetch(`http://${ip}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

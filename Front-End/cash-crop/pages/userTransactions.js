@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
+import { IpContext } from '../IpContext'; // Import the context;
 
 const UserTransactions = ({ route }) => {
   const { memberID, username } = route.params;
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const ip = useContext(IpContext); // Access the IP address
 
   useEffect(() => {
     if (memberID) {
-      fetch(`http://192.168.1.65:5000/user_transactions?member_id=${memberID}`)
+      fetch(`http://${ip}/user_transactions?member_id=${memberID}`)
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');

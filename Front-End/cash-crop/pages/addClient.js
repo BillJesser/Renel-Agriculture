@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
+import { IpContext } from '../IpContext'; // Import the context
 
 const AddClient = () => {
   const [username, setUsername] = useState('');
@@ -7,6 +8,7 @@ const AddClient = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const ip = useContext(IpContext); // Access the IP address
 
   const handleRegister = () => {
     if (!username || !memberID || !password || !confirmPassword) {
@@ -21,7 +23,7 @@ const AddClient = () => {
 
     const newUser = { username, memberID, password };
 
-    fetch('http://192.168.1.49:5000/add_client', {
+    fetch(`http://${ip}/add_client`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
