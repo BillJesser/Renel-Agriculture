@@ -5,34 +5,93 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FinancesScreen({ navigation }) {
   const [username, setUsername] = useState('');
+  const [memberID, setMemberID] = useState('');
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUsername = async () => {
+    const fetchUserData = async () => {
       try {
         const storedUsername = await AsyncStorage.getItem('username');
+        const storedMemberID = await AsyncStorage.getItem('memberID');
         if (storedUsername !== null) {
           setUsername(storedUsername);
-        } 
+        }
+        if (storedMemberID !== null) {
+          setMemberID(storedMemberID);
+          fetchTransactions(storedMemberID);
+        }
       } catch (error) {
-        console.error('Failed to load username:', error);
+        console.error('Failed to load user data:', error);
       }
     };
 
-    fetchUsername();
+    fetchUserData();
   }, []);
 
+  const fetchTransactions = async (memberID) => {
+    try {
+      const response = await fetch(`http://192.168.5.241:5000/user_transactions?member_id=${memberID}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setTransactions(data);
+      setLoading(false);
+    } catch (error) {
+      setError('Error fetching data. Please try again.');
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text>Error: {error}</Text>
+      </View>
+    );
+  }
+
   const tableHead = [
-    'Date', 'Savings', 'Cumulative', 'Loan', 
-    'Loan Date', 'Repayment Due', 'Repayment', 'Outstanding', 
-    'Interest', 'Dividend', 'Purpose', 'Remarks'
+    'Transaction Dates', 
+    'Saving Contributions', 
+    'Cumulative Savings', 
+    'Loan Amount', 
+    'Loan Date', 
+    'Repayment Due Date', 
+    'Loan Repayment', 
+    'Outstanding Loan Balance', 
+    'Interest Paid', 
+    'Dividend', 
+    'Purpose of Loan', 
+    'Remarks'
   ];
 
-  const tableData = [
-    ['2024-06-01', '$500', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
-    ['2024-06-01', '$100000', '$1500', '$2000', '2024-05-15', '2024-11-15', '$250', '$1750', '$50', '$20', 'Business', 'On track'],
-  ];
+  const tableData = transactions.transaction_dates.map((_, index) => [
+    transactions.transaction_dates[index],
+    transactions.saving_contributions[index],
+    transactions.cumulative_savings[index],
+    transactions.loan_amount[index],
+    transactions.loan_date[index],
+    transactions.repaymentDueDate[index],
+    transactions.loanRepayment[index],
+    transactions.outstandingLoanBalance[index],
+    transactions.interestPaid[index],
+    transactions.dividend[index],
+    transactions.purposeOfLoan[index],
+    transactions.remarks[index]
+  ]);
 
-  const widthArr = [80, 80, 100, 80, 100, 120, 100, 100, 80, 80, 100, 100];
+  const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
   return (
     <View style={styles.container}>
@@ -109,11 +168,11 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 20,
   },
-  head: { 
-    height: 40, 
+  head: {
+    height: 40,
     backgroundColor: '#f1f8ff',
   },
-  text: { 
+  text: {
     margin: 6,
     textAlign: 'center',
     fontSize: 12,
