@@ -164,6 +164,20 @@ def update_user():
             return jsonify({'error': str(e)}), 500
 
     return jsonify({'error': 'User not found'}), 404
+
+
+@app.route('/delete_user/<memberID>', methods=['DELETE'])
+@cross_origin()
+def delete_user(memberID):
+    try:
+        result = delete(memberID)
+
+        if not result:
+            return jsonify({'error': 'User not found'}), 404
+
+        return jsonify({'message': 'User deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
     
 if __name__ == "__main__":
