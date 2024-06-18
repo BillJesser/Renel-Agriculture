@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from users import *
+from transactions import *
 
 app = Flask(__name__)
 client = pym.MongoClient("mongodb://localhost:27017")
@@ -118,6 +119,18 @@ def add_admin():
 
 
 
+@app.route('/insert', methods=['POST'])
+@cross_origin()
+def handle_new_input():
+    form_data = request.json
+    result = insert_data(form_data)
+    if result["status"] == "inserted":
+            return jsonify({"status": "success", "inserted_id": str(result["inserted_id"])}), 201
+    elif result["status"] == "updated":
+        return jsonify({"status": "success", "message": f"Member ID {result['member_id']} updated successfully."}), 200
+    else:
+        return jsonify({"status": "error", "message": result["message"]}), 500
+    
 if __name__ == "__main__":
     cors = CORS(app)
     app.run(host='0.0.0.0')

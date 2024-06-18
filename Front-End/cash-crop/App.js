@@ -21,11 +21,13 @@ import InputData from './pages/inputData';
 import { IpProvider } from './IpContext';
 import LoginTutorials from './pages/loginTutorial';
 
+
 const Stack = createStackNavigator();
-const ipAddress = '192.168.1.170:5000';  // Manually set the IP address here
+const ipAddress = '192.168.1.170:5000';  
 
 export default function App() {
   return (
+    
     <IpProvider initialIp={ipAddress}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
@@ -49,5 +51,6 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </IpProvider>
+
   );
 }
