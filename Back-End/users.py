@@ -57,17 +57,14 @@ def login(password, memberId):
     else:
         return False
     
-def delete_user(username, password):
+def delete(memberId):
 
-    # Find username
-    user = users.find_one({"username": username})
+    user = users.find_one({"memberID": memberId})
+    print(user)
 
     if user:
-        hashpass = user["password"]
-        if bcrypt.checkpw(password.encode("utf-8"), hashpass):
-            # Delete the user
-            users.delete_one({"_id": user["_id"]})
-            return True
+        users.delete_one({"memberID": memberId})
+        return True
 
     return False 
 

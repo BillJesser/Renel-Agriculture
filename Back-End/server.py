@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from users import *
+from transactions import *
 
 app = Flask(__name__)
 client = pym.MongoClient("mongodb://localhost:27017")
@@ -118,6 +119,67 @@ def add_admin():
 
 
 
+@app.route('/insert', methods=['POST'])
+@cross_origin()
+def handle_new_input():
+    form_data = request.json
+    result = insert_data(form_data)
+    if result["status"] == "inserted":
+            return jsonify({"status": "success", "inserted_id": str(result["inserted_id"])}), 201
+    elif result["status"] == "updated":
+        return jsonify({"status": "success", "message": f"Member ID {result['member_id']} updated successfully."}), 200
+    else:
+        return jsonify({"status": "error", "message": result["message"]}), 500
+    
+@app.route('/update_user', methods=['POST'])
+@cross_origin()
+def update_user():
+    data = request.json
+    memberID = data.get('memberID')
+    new_username = data.get('username')
+    new_password = data.get('password')
+
+    existing_user = users.find_one({'memberID': memberID})
+
+    if existing_user:
+        try:
+            if new_username:
+                existing_user['username'] = new_username
+
+            if new_password:
+                hash_pass = hash_function(new_password)
+                existing_user['password'] = hash_pass
+
+           
+            users.update_one({'memberID': memberID}, {'$set': existing_user})
+
+            # Prepare response
+            response_data = {'message': 'User information updated successfully'}
+            if 'username' in existing_user:
+                response_data['updatedUsername'] = existing_user['username']
+
+            return jsonify(response_data), 200
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    return jsonify({'error': 'User not found'}), 404
+
+
+@app.route('/delete_user/<memberID>', methods=['DELETE'])
+@cross_origin()
+def delete_user(memberID):
+    try:
+        result = delete(memberID)
+
+        if not result:
+            return jsonify({'error': 'User not found'}), 404
+
+        return jsonify({'message': 'User deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    
 if __name__ == "__main__":
     cors = CORS(app)
     app.run(host='0.0.0.0')

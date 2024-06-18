@@ -28,6 +28,10 @@ export default function DashboardScreen({ navigation }) {
         <View style={styles.logoutButtonContainer}>
           <Button title="Logout" onPress={() => navigation.navigate('Home')} color="#080" />
         </View>
+        
+        <TouchableOpacity style={styles.tutorialLinkContainer} onPress={() => navigation.navigate('UserTutorial')}>
+          <Text style={styles.tutorialLinkText}>User Tutorial</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
@@ -84,5 +88,13 @@ const styles = StyleSheet.create({
   logoutButtonContainer: {
     width: '80%',
     marginTop: 40,
+  },
+  tutorialLinkContainer: {
+    marginTop: 10,
+  },
+  tutorialLinkText: {
+    fontSize: 16,
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
 });

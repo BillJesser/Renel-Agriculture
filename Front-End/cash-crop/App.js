@@ -1,3 +1,4 @@
+// App.js
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,17 +18,21 @@ import AddAdmin from './pages/addAdmin';
 import EditUser from './pages/editUser';
 import AccountInfo from './pages/accountInfo';
 import InputData from './pages/inputData';
+import { IpProvider } from './IpContext';
 import LoginTutorials from './pages/loginTutorial';
+import UserTutorial from './pages/userTutorial';
+import AdminTutorial from './pages/adminTutorial';
+
 
 const Stack = createStackNavigator();
-const ipAddress = '192.168.1.56:5000';
+const ipAddress = '192.168.1.170:5000';  
 
 export default function App() {
   return (
-
+    
     <IpProvider initialIp={ipAddress}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="AdminDashboard">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Cash Crop' }} />
           <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
           <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Dashboard', headerLeft: null }} />

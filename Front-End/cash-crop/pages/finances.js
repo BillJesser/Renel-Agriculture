@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IpContext } from '../IpContext'; // Import the context
 
 export default function FinancesScreen({ navigation }) {
   const [username, setUsername] = useState('');
@@ -29,13 +30,13 @@ export default function FinancesScreen({ navigation }) {
       }
     };
 
-
     fetchUserData();
   }, []);
 
   const fetchTransactions = async (memberID) => {
     try {
       const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -109,7 +110,6 @@ export default function FinancesScreen({ navigation }) {
 
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
-
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
       <View style={styles.container}>
@@ -132,7 +132,7 @@ export default function FinancesScreen({ navigation }) {
           <View style={styles.buttonContainer}>
             <Button
               title="Input New Data"
-              onPress={() => navigation.navigate('InputData')} // Update this line
+              onPress={() => navigation.navigate('InputData', { refreshTransactions: fetchTransactions })}
               color="#080"
             />
           </View>

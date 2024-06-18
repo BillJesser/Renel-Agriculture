@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet, Text, ImageBackground } from 'react-native';
-
+import { IpContext } from '../IpContext'; // Import the context
 const backgroundImage = require('../assets/farmer1.jpeg');
 
 const AddAdmin = () => {
@@ -9,6 +9,7 @@ const AddAdmin = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const ip = useContext(IpContext); // Access the IP address
 
   const handleRegister = () => {
     if (!username || !adminID || !password || !confirmPassword) {
@@ -23,8 +24,7 @@ const AddAdmin = () => {
 
     const newAdmin = { username, adminID, password };
 
-    fetch('http://192.168.5.249:5000/add_admin', {
-
+    fetch(`http://${ip}/add_admin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

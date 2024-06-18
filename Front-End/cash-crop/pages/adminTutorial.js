@@ -7,9 +7,10 @@ import * as FileSystem from 'expo-file-system';
 
 // Your component to render the embedded file and buttons
 const GoogleDriveEmbed = () => {
-  const fileId = '1By8IkUlQYePKYKhK7cWYrVAVyrfDc-6A'; // Replace with your actual file ID
+  const fileId = '1lob4hYCxBTJLsqcEJMGVv4aq0mFCVQ3h'; // Replace with your actual file ID
   const fileUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+
   const download = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
 
 

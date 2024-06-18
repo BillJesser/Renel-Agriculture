@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button, ImageBackground, Linking } from 'react-native';
 
 const backgroundImage = require('../assets/farmer1.jpeg');
 const financeImage = require('../assets/finances.png');
@@ -43,6 +43,9 @@ export default function AdminDashboardScreen({ navigation }) {
         <View style={styles.logoutButtonContainer}>
           <Button title="Logout" onPress={() => navigation.navigate('Home')} color="#080" />
         </View>
+        <TouchableOpacity style={styles.tutorialLinkContainer} onPress={() => navigation.navigate('AdminTutorial')}>
+          <Text style={styles.tutorialLinkText}>Admin Tutorial</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
@@ -101,5 +104,13 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 20,
     alignItems: 'center',
+  },
+  tutorialLinkContainer: {
+    marginTop: 10,
+  },
+  tutorialLinkText: {
+    fontSize: 16,
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
 });
