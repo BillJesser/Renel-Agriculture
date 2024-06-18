@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, ImageBackground } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { IpContext } from '../IpContext'; // Import the context;
+
+const backgroundImage = require('../assets/farmer1.jpeg');
 
 const UserTransactions = ({ route }) => {
   const { memberID, username } = route.params;
@@ -47,17 +49,17 @@ const UserTransactions = ({ route }) => {
   }
 
   const tableHead = [
-    'Transaction Dates', 
-    'Saving Contributions', 
-    'Cumulative Savings', 
-    'Loan Amount', 
-    'Loan Date', 
-    'Repayment Due Date', 
-    'Loan Repayment', 
-    'Outstanding Loan Balance', 
-    'Interest Paid', 
-    'Dividend', 
-    'Purpose of Loan', 
+    'Transaction Dates',
+    'Saving Contributions',
+    'Cumulative Savings',
+    'Loan Amount',
+    'Loan Date',
+    'Repayment Due Date',
+    'Loan Repayment',
+    'Outstanding Loan Balance',
+    'Interest Paid',
+    'Dividend',
+    'Purpose of Loan',
     'Remarks'
   ];
 
@@ -79,30 +81,39 @@ const UserTransactions = ({ route }) => {
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
   return (
-    <View style={styles.container}>
-      {/* Static Header */}
-      <View style={styles.header}>
-        <Text style={styles.heading}>Member Name: {username}</Text>
-        <Text style={styles.heading}>User ID: {memberID}</Text>
-      </View>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
+      <View style={styles.container}>
+        {/* Static Header */}
+        <View style={styles.header}>
+          <Text style={styles.heading}>Member Name: {username}</Text>
+          <Text style={styles.heading}>User ID: {memberID}</Text>
+        </View>
 
-      {/* Scrollable Table */}
-      <ScrollView horizontal>
-        <ScrollView contentContainerStyle={styles.tableContainer}>
-          <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-            <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
-            <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
-          </Table>
+        {/* Scrollable Table */}
+        <ScrollView horizontal>
+          <ScrollView contentContainerStyle={styles.tableContainer}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+              <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
+              <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
+            </Table>
+          </ScrollView>
         </ScrollView>
-      </ScrollView>
-    </View>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // or 'stretch'
+  },
+  imageOpacity: {
+    opacity: 0.5, // Adjust the opacity as needed
   },
   header: {
     padding: 16,

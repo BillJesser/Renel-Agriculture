@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, Button, ScrollView, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IpContext } from '../IpContext'; // Import the context
-
-const backgroundImage = require('../assets/farmer1.jpeg');
 
 export default function FinancesScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [memberID, setMemberID] = useState('');
   const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(true);
-  const ip = useContext(IpContext); 
+  const [error, setError] = useState(null);
+  const ip = useContext(IpContext);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -32,34 +31,65 @@ export default function FinancesScreen({ navigation }) {
     };
 
     fetchUserData();
-
   }, []);
 
   const fetchTransactions = async (memberID) => {
     try {
       const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
-      
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
       const data = await response.json();
       setTransactions(data);
+      setLoading(false);
     } catch (error) {
       console.error('Failed to fetch transactions:', error);
-    } finally {
+      setError('Error fetching data. Please try again.');
       setLoading(false);
     }
   };
 
+  const handleInputNewData = () => {
+    navigation.navigate('InputData', { refreshTransactions: fetchTransactions });
+  };
+
+  const handlePrintPaper = () => {
+    alert('Print Paper pressed');
+  };
+
+  const handleFinanceTutorial = () => {
+    alert('Finance Tutorial pressed');
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text>Error: {error}</Text>
+      </View>
+    );
+  }
+
   const tableHead = [
-    'Transaction Dates', 
-    'Saving Contributions', 
-    'Cumulative Savings', 
-    'Loan Amount', 
-    'Loan Date', 
-    'Repayment Due Date', 
-    'Loan Repayment', 
-    'Outstanding Loan Balance', 
-    'Interest Paid', 
-    'Dividend', 
-    'Purpose of Loan', 
+    'Transaction Dates',
+    'Saving Contributions',
+    'Cumulative Savings',
+    'Loan Amount',
+    'Loan Date',
+    'Repayment Due Date',
+    'Loan Repayment',
+    'Outstanding Loan Balance',
+    'Interest Paid',
+    'Dividend',
+    'Purpose of Loan',
     'Remarks'
   ];
 
@@ -82,19 +112,21 @@ export default function FinancesScreen({ navigation }) {
 
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
-      <View style={styles.overlay}>
-        <Text style={styles.memberName}>Client: {username}</Text>
+      <View style={styles.container}>
+        {/* Static Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>₵ash Crop</Text>
+          <Text style={styles.heading}>Member Name: {username}</Text>
+          <Text style={styles.heading}>User ID: {memberID}</Text>
         </View>
-        <Text style={styles.subtitle}>Finances</Text>
-        <ScrollView horizontal style={styles.chartContainer}>
-          <View>
+
+        {/* Scrollable Table */}
+        <ScrollView horizontal>
+          <ScrollView contentContainerStyle={styles.tableContainer}>
             <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
               <Row data={tableHead} style={styles.head} widthArr={widthArr} textStyle={styles.text} />
               <Rows data={tableData} widthArr={widthArr} textStyle={styles.text} />
             </Table>
-          </View>
+          </ScrollView>
         </ScrollView>
         <View style={styles.buttonRow}>
           <View style={styles.buttonContainer}>
@@ -104,20 +136,9 @@ export default function FinancesScreen({ navigation }) {
               color="#080"
             />
           </View>
-          <View style={styles.buttonContainer}>
-            <Button
-              title="Print Paper"
-              onPress={() => alert('Print Paper pressed')}
-              color="#080"
-            />
-          </View>
-        </View>
-        <View style={styles.singleButtonContainer}>
-          <Button
-            title="Finance Tutorial"
-            onPress={() => alert('Finance Tutorial pressed')}
-            color="#080"
-          />
+          <TouchableOpacity style={styles.buttonSingle} onPress={handleFinanceTutorial}>
+            <Text style={styles.buttonText}>Finance Tutorial</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
@@ -125,48 +146,33 @@ export default function FinancesScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+    paddingBottom: 40, // Added padding to the bottom to create space below buttons
+  },
   backgroundImage: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    resizeMode: 'cover', // or 'stretch'
   },
   imageOpacity: {
-    opacity: 0.3,
-  },
-  overlay: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    padding: 20,
+    opacity: 0.5, // Adjust the opacity as needed
   },
   header: {
-    width: '100%',
-    alignItems: 'center',
+    padding: 16,
+    alignSelf: 'flex-start', // Align header to the start (left)
   },
-  title: {
-    fontSize: 30,
+  heading: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#080',
+    marginBottom: 8,
+    color: '#080', // Green color
   },
-  memberName: {
-    fontSize: 16,
-    color: '#080',
-    alignSelf: 'flex-start',
-    marginBottom: 5
-  },
-  subtitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#080',
-  },
-  chartContainer: {
-    flex: 1,
-    width: '100%',
-    marginBottom: 20,
+  tableContainer: {
+    padding: 16,
   },
   head: {
-    height: 40,
+    height: 50,
     backgroundColor: '#f1f8ff',
   },
   text: {
@@ -174,17 +180,34 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
   },
-  buttonRow: {
-    flexDirection: 'row',
-    marginBottom: 20,
+  buttonsContainer: {
+    marginTop: 20, // Increased margin to move the buttons higher
+    alignItems: 'center',
   },
-  buttonContainer: {
-    flex: 1,
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#080',
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 5,
     marginHorizontal: 10,
   },
-  singleButtonContainer: {
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 20,
+  buttonSingle: {
+    backgroundColor: '#080',
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 5,
+    marginTop: 10, // Added margin to separate it from the row above
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
