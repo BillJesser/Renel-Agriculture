@@ -10,23 +10,19 @@ const AccountInfo = ({ route, navigation }) => {
   const [usernameInput, setUsernameInput] = useState(username);
   const [passwordInput, setPasswordInput] = useState('');
   const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
+  const [error, setError] = useState('');
 
   const handleSave = async () => {
     if (passwordInput !== confirmPasswordInput) {
-      Alert.alert('Error', 'Passwords do not match');
+      setError('Passwords do not match');
       return;
     }
 
-    const updatedInfo = {};
-    updatedInfo.memberID = memberIDInput;
-
-    if (usernameInput !== username) {
-      updatedInfo.username = usernameInput;
-    }
-
-    if (passwordInput.trim() !== '') {
-      updatedInfo.password = passwordInput;
-    }
+    const updatedInfo = {
+      memberID: memberIDInput,
+      ...(usernameInput !== username && { username: usernameInput }),
+      ...(passwordInput.trim() && { password: passwordInput }),
+    };
 
     try {
       const response = await fetch('http://192.168.1.64:5000/update_user', {
@@ -40,16 +36,15 @@ const AccountInfo = ({ route, navigation }) => {
       const data = await response.json();
       if (response.ok) {
         Alert.alert('Success', data.message);
-        // Update username locally if it has changed
         if (data.updatedUsername) {
           setUsernameInput(data.updatedUsername);
         }
       } else {
-        Alert.alert('Error', data.error || 'Failed to update information');
+        setError(data.error || 'Failed to update information');
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'Failed to update information');
+      setError('Failed to update information');
     }
   };
 
@@ -76,11 +71,11 @@ const AccountInfo = ({ route, navigation }) => {
                 Alert.alert('Success', data.message);
                 navigation.goBack();
               } else {
-                Alert.alert('Error', data.error || 'Failed to delete user');
+                setError(data.error || 'Failed to delete user');
               }
             } catch (error) {
               console.error('Error:', error);
-              Alert.alert('Error', 'Failed to delete user');
+              setError('Failed to delete user');
             }
           },
         },
@@ -89,41 +84,49 @@ const AccountInfo = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Update Member Information</Text>
-      <TextInput
-        style={styles.input}
-        value={memberIDInput}
-        onChangeText={setMemberIDInput}
-        placeholder="Member ID"
-        editable={false}
-
-      />
-      <TextInput
-        style={styles.input}
-        value={usernameInput}
-        onChangeText={setUsernameInput}
-        placeholder="Username"
-      />
-      <TextInput
-        style={styles.input}
-        value={passwordInput}
-        onChangeText={setPasswordInput}
-        placeholder="Update Password"
-        secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        value={confirmPasswordInput}
-        onChangeText={setConfirmPasswordInput}
-        placeholder="Confirm Password"
-        secureTextEntry
-      />
-      <Button title="Save" onPress={handleSave} />
-      <View style={styles.deleteButtonContainer}>
-        <Button title="Delete User" color="red" onPress={handleDelete} />
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Update Member Information</Text>
+        <TextInput
+          style={styles.input}
+          value={memberIDInput}
+          onChangeText={setMemberIDInput}
+          placeholder="Member ID"
+          editable={false}
+        />
+        <TextInput
+          style={styles.input}
+          value={usernameInput}
+          onChangeText={setUsernameInput}
+          placeholder="Username"
+        />
+        <TextInput
+          style={styles.input}
+          value={passwordInput}
+          onChangeText={setPasswordInput}
+          placeholder="Update Password"
+          secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          value={confirmPasswordInput}
+          onChangeText={setConfirmPasswordInput}
+          placeholder="Confirm Password"
+          secureTextEntry
+        />
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+        <View style={styles.buttonContainer}>
+          <View style={styles.fullWidthButton}>
+            <Button title="Save" onPress={handleSave} color="#080" />
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <View style={styles.fullWidthButton}>
+            <Button title="Delete User" color="red" onPress={handleDelete} />
+          </View>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -158,12 +161,20 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
+  error: {
+    color: 'red',
+    marginBottom: 16,
+  },
   buttonContainer: {
     width: '100%',
     marginTop: 16,
   },
+  fullWidthButton: {
+    width: '100%',
+  },
   deleteButtonContainer: {
     marginTop: 16,
+    width: '100%',
   },
 });
 

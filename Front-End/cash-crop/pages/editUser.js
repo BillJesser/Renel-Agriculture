@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { IpContext } from '../IpContext'; // Import the context
 
 const EditUser = () => {
@@ -8,6 +8,14 @@ const EditUser = () => {
   const [users, setUsers] = useState([]);
   const navigation = useNavigation();
   const ip = useContext(IpContext); // Access the IP address
+
+  useFocusEffect(
+    useCallback(() => {
+      // Reset state when the screen comes into focus
+      setQuery('');
+      setUsers([]);
+    }, [])
+  );
 
   const handleSearch = (text) => {
     setQuery(text);

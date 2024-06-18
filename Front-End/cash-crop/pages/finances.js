@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity, Button } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IpContext } from '../IpContext'; // Import the context
+import { IpContext } from '../IpContext'; 
 
 const backgroundImage = require('../assets/farmer1.jpeg');
 
@@ -38,7 +38,6 @@ export default function FinancesScreen({ navigation }) {
   const fetchTransactions = async (memberID) => {
     try {
       const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
-
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -130,16 +129,19 @@ export default function FinancesScreen({ navigation }) {
             </Table>
           </ScrollView>
         </ScrollView>
-        <View style={styles.buttonRow}>
-          <View style={styles.buttonContainer}>
-            <Button
-              title="Input New Data"
-              onPress={() => navigation.navigate('InputData', { refreshTransactions: fetchTransactions })}
-              color="#080"
-            />
+
+        {/* Buttons */}
+        <View style={styles.buttonsContainer}>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={styles.button} onPress={handleInputNewData}>
+              <Text style={styles.buttonText}>Input New Data</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleFinanceTutorial}>
+              <Text style={styles.buttonText}>Finance Tutorial</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.buttonSingle} onPress={handleFinanceTutorial}>
-            <Text style={styles.buttonText}>Finance Tutorial</Text>
+          <TouchableOpacity style={styles.buttonSingle} onPress={handlePrintPaper}>
+            <Text style={styles.buttonText}>Print Paper</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -186,30 +188,31 @@ const styles = StyleSheet.create({
     marginTop: 20, // Increased margin to move the buttons higher
     alignItems: 'center',
   },
-  row: {
+  buttonRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     width: '100%',
     marginBottom: 10,
+    paddingHorizontal: 20, // Add padding to ensure the buttons don't touch the sides
   },
   button: {
     backgroundColor: '#080',
-    paddingVertical: 15,
-    paddingHorizontal: 40,
+    paddingVertical: 10, // Reduced vertical padding
+    paddingHorizontal: 30, // Reduced horizontal padding
     borderRadius: 5,
     marginHorizontal: 10,
   },
   buttonSingle: {
     backgroundColor: '#080',
-    paddingVertical: 15,
-    paddingHorizontal: 40,
+    paddingVertical: 10, // Reduced vertical padding
+    paddingHorizontal: 30, // Reduced horizontal padding
     borderRadius: 5,
     marginTop: 10, // Added margin to separate it from the row above
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 14, // Slightly smaller font size
     textAlign: 'center',
   },
 });
