@@ -38,9 +38,13 @@ const AccountInfo = ({ route, navigation }) => {
       const data = await response.json();
       if (response.ok) {
         Alert.alert('Success', data.message);
+
+        // Update username and clear passwords if successful
         if (data.updatedUsername) {
           setUsernameInput(data.updatedUsername);
         }
+        setPasswordInput('');
+        setConfirmPasswordInput('');
       } else {
         setError(data.error || 'Failed to update information');
       }
@@ -61,7 +65,7 @@ const AccountInfo = ({ route, navigation }) => {
           style: 'destructive',
           onPress: async () => {
             try {
-              const response = await fetch(`http:///${ip}/delete_user/${memberID}`, {
+              const response = await fetch(`http://${ip}/delete_user/${memberID}`, {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
