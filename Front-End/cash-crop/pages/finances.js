@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IpContext } from '../IpContext'; 
+import { captureRef } from 'react-native-view-shot';
+import * as Print from 'expo-print';
+import * as Sharing from 'expo-sharing';
+import { IpContext } from '../IpContext';
 
 const backgroundImage = require('../assets/farmer1.jpeg');
 
@@ -13,6 +16,7 @@ export default function FinancesScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const ip = useContext(IpContext);
+  const viewRef = useRef();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -38,7 +42,6 @@ export default function FinancesScreen({ navigation }) {
   const fetchTransactions = async (memberID) => {
     try {
       const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
-  
       const data = await response.json();
       setTransactions(data);
       setLoading(false);
@@ -53,8 +56,30 @@ export default function FinancesScreen({ navigation }) {
     navigation.navigate('InputData', { refreshTransactions: fetchTransactions });
   };
 
-  const handlePrintPaper = () => {
-    alert('Print Paper pressed');
+  const handlePrintPaper = async () => {
+    try {
+      const uri = await captureRef(viewRef, {
+        format: 'jpg',
+        quality: 0.8
+      });
+
+      const htmlContent = `
+        <div>
+          <h1>Member Name: ${username}</h1>
+          <h2>User ID: ${memberID}</h2>
+          <img src="${uri}" />
+        </div>
+      `;
+
+      const { uri: pdfUri } = await Print.printToFileAsync({
+        html: htmlContent,
+        base64: false,
+      });
+
+      await Sharing.shareAsync(pdfUri);
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+    }
   };
 
   const handleFinanceTutorial = () => {
@@ -120,7 +145,7 @@ export default function FinancesScreen({ navigation }) {
         </View>
   
         {/* Scrollable Table */}
-        <ScrollView horizontal>
+        <ScrollView ref={viewRef} horizontal>
           <ScrollView contentContainerStyle={styles.tableContainer}>
             {transactions && transactions.transaction_dates && transactions.transaction_dates.length > 0 ? (
               <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>

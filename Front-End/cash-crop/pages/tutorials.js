@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from
 const backgroundImage = require('../assets/farmer1.jpeg');
 const cornImage = require('../assets/corn.png');
 const soybeanImage = require('../assets/soybean.jpg');
+const groundnutImage = require('../assets/groundnut.png');  // Add the groundnut image
+const riceImage = require('../assets/rice.jpg');  // Add the rice image
 
 export default function TutorialsScreen({ navigation }) {
     return (
@@ -12,18 +14,34 @@ export default function TutorialsScreen({ navigation }) {
                 <Text style={styles.title}>₵ash Crop</Text>
                 <Text style={styles.subtitle}>Tutorials</Text>
 
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Corn')} style={styles.button}>
-                        <Image source={cornImage} style={styles.image} />
-                        <Text style={styles.buttonText}>Corn</Text>
-                    </TouchableOpacity>
-                </View>
+                <View style={styles.gridContainer}>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Corn')} style={styles.button}>
+                            <Image source={cornImage} style={styles.image} />
+                            <Text style={styles.buttonText}>Corn</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Soybeans')} style={styles.button}>
-                        <Image source={soybeanImage} style={styles.image} />
-                        <Text style={styles.buttonText}>Soybeans</Text>
-                    </TouchableOpacity>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Soybeans')} style={styles.button}>
+                            <Image source={soybeanImage} style={styles.image} />
+                            <Text style={styles.buttonText}>Soybeans</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Groundnut')} style={styles.button}>
+                            <Image source={groundnutImage} style={styles.image} />
+                            <Text style={styles.buttonText}>Groundnut</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Rice')} style={styles.button}>
+                            <Image source={riceImage} style={styles.image} />
+                            <Text style={styles.buttonText}>Rice</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </ImageBackground>
@@ -58,14 +76,22 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         color: '#080',
     },
+    gridContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        paddingHorizontal: '10%',
+    },
     buttonContainer: {
-        width: '80%',
+        width: '45%',  // Adjust this width for spacing between buttons
         marginVertical: 10,
         alignItems: 'center',
     },
     button: {
-        width: 180,
-        height: 180,
+        width: 150,  // Adjusted size for grid layout
+        height: 150,  // Adjusted size for grid layout
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderWidth: 2,
         borderColor: '#080',
@@ -75,8 +101,8 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     image: {
-        width: 140,
-        height: 140,
+        width: 110,  // Adjusted size for smaller buttons
+        height: 110,  // Adjusted size for smaller buttons
         resizeMode: 'contain',
     },
     buttonText: {

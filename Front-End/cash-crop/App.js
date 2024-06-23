@@ -23,9 +23,11 @@ import LoginTutorials from './pages/loginTutorial';
 import UserTutorial from './pages/userTutorial';
 import AdminTutorial from './pages/adminTutorial';
 import AdminInputData from './pages/adminInputData';
+import Groundnut from './pages/groundnut';
+import Rice from './pages/rice';
 
 const Stack = createStackNavigator();
-const ipAddress = '192.168.0.3:5000';  
+const ipAddress = '192.168.1.59:5000';  
 
 export default function App() {
   return (
@@ -53,6 +55,8 @@ export default function App() {
           <Stack.Screen name="UserTutorial" component={UserTutorial} options={{ title: 'User Tutorial' }} />
           <Stack.Screen name="AdminTutorial" component={AdminTutorial} options={{ title: 'Admin Tutorial' }} />
           <Stack.Screen name="AdminInputData" component={AdminInputData} options={{ title: 'Admin Input Data' }} />
+          <Stack.Screen name="Groundnut" component={Groundnut} options={{ title: 'Groundnut' }} />
+          <Stack.Screen name="Rice" component={Rice} options={{ title: 'Rice' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </IpProvider>
