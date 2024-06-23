@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
+import * as Print from 'expo-print';
 import { IpContext } from '../IpContext';
 
 const backgroundImage = require('../assets/farmer1.jpeg');
@@ -35,8 +36,73 @@ export default function FinancesScreen({ navigation, route }) {
     navigation.navigate('AdminInputData', { memberID: memberID, username: username, refreshTransactions: fetchTransactions });
   };
 
-  const handlePrintPaper = () => {
-    alert('Print Paper pressed');
+  const handlePrintPaper = async () => {
+    if (!transactions) {
+      alert('No transactions available to generate PDF.');
+      return;
+    }
+
+    try {
+      // Generate HTML content
+      const htmlContent = `
+        <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; }
+              table { width: 100%; border-collapse: collapse; }
+              th, td { padding: 8px 12px; border: 1px solid #ccc; text-align: left; }
+              th { background-color: #f2f2f2; }
+            </style>
+          </head>
+          <body>
+            <h1>Member Name: ${username}</h1>
+            <h2>User ID: ${memberID}</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Transaction Dates</th>
+                  <th>Saving Contributions</th>
+                  <th>Cumulative Savings</th>
+                  <th>Loan Amount</th>
+                  <th>Loan Date</th>
+                  <th>Repayment Due Date</th>
+                  <th>Loan Repayment</th>
+                  <th>Outstanding Loan Balance</th>
+                  <th>Interest Paid</th>
+                  <th>Dividend</th>
+                  <th>Purpose of Loan</th>
+                  <th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${transactions.transaction_dates.map((date, index) => `
+                  <tr>
+                    <td>${date || ''}</td>
+                    <td>${transactions.saving_contributions[index] || ''}</td>
+                    <td>${transactions.cumulative_savings[index] || ''}</td>
+                    <td>${transactions.loan_amount[index] || ''}</td>
+                    <td>${transactions.loan_date[index] || ''}</td>
+                    <td>${transactions.repaymentDueDate[index] || ''}</td>
+                    <td>${transactions.loanRepayment[index] || ''}</td>
+                    <td>${transactions.outstandingLoanBalance[index] || ''}</td>
+                    <td>${transactions.interestPaid[index] || ''}</td>
+                    <td>${transactions.dividend[index] || ''}</td>
+                    <td>${transactions.purposeOfLoan[index] || ''}</td>
+                    <td>${transactions.remarks[index] || ''}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </body>
+        </html>
+      `;
+
+      // Print the HTML content
+      await Print.printAsync({ html: htmlContent });
+    } catch (error) {
+      console.error('Failed to print document:', error);
+      alert('Failed to print document. Please try again.');
+    }
   };
 
   const handleEditData = () => {
@@ -101,7 +167,7 @@ export default function FinancesScreen({ navigation, route }) {
           <Text style={styles.heading}>Member Name: {username}</Text>
           <Text style={styles.heading}>User ID: {memberID}</Text>
         </View>
-  
+
         {/* Scrollable Table */}
         <ScrollView horizontal>
           <ScrollView contentContainerStyle={styles.tableContainer}>
@@ -115,7 +181,7 @@ export default function FinancesScreen({ navigation, route }) {
             )}
           </ScrollView>
         </ScrollView>
-  
+
         {/* Buttons */}
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonRow}>
