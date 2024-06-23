@@ -39,7 +39,7 @@ const AddAdmin = () => {
       })
       .then(data => {
         if (data.success) {
-          alert('Success', 'Admin has been registered successfully');
+          Alert.alert('Success', 'Admin has been registered successfully');
           setUsername('');
           setAdminID('');
           setPassword('');
@@ -51,8 +51,14 @@ const AddAdmin = () => {
       })
       .catch(error => {
         console.error('Error:', error);
-        setError('Admin ID Must Be Unique. Please try again.');
+        setError('Admin ID must be unique. Please try again.');
       });
+  };
+
+  // Function to handle admin ID input
+  const handleAdminIDChange = (text) => {
+    const numericValue = text.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    setAdminID(numericValue);
   };
 
   return (
@@ -69,7 +75,8 @@ const AddAdmin = () => {
           style={styles.input}
           placeholder="Admin ID"
           value={adminID}
-          onChangeText={setAdminID}
+          onChangeText={handleAdminIDChange}
+          keyboardType="numeric" // Ensures numeric keyboard
         />
         <TextInput
           style={styles.input}

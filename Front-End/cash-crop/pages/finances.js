@@ -122,10 +122,6 @@ export default function FinancesScreen({ navigation }) {
     }
   };
 
-  const handleFinanceTutorial = () => {
-    alert('Finance Tutorial pressed');
-  };
-
   if (loading) {
     return (
       <View style={styles.container}>
@@ -184,6 +180,7 @@ export default function FinancesScreen({ navigation }) {
           <Text style={styles.heading}>User ID: {memberID}</Text>
         </View>
 
+
         {/* Scrollable Table */}
         <ScrollView horizontal>
           <ScrollView contentContainerStyle={styles.tableContainer}>
@@ -198,19 +195,17 @@ export default function FinancesScreen({ navigation }) {
           </ScrollView>
         </ScrollView>
 
+
         {/* Buttons */}
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonRow}>
             <TouchableOpacity style={styles.button} onPress={handleInputNewData}>
               <Text style={styles.buttonText}>Input New Data</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleFinanceTutorial}>
-              <Text style={styles.buttonText}>Finance Tutorial</Text>
+            <TouchableOpacity style={[styles.button, styles.centeredButton]} onPress={handlePrintPaper}>
+              <Text style={styles.buttonText}>Print Paper</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.buttonSingle} onPress={handlePrintPaper}>
-            <Text style={styles.buttonText}>Print Paper</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
@@ -261,7 +256,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     marginBottom: 10,
-    paddingHorizontal: 20, // Add padding to ensure the buttons don't touch the sides
   },
   button: {
     backgroundColor: '#080',
@@ -269,18 +263,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30, // Reduced horizontal padding
     borderRadius: 5,
     marginHorizontal: 10,
-  },
-  buttonSingle: {
-    backgroundColor: '#080',
-    paddingVertical: 10, // Reduced vertical padding
-    paddingHorizontal: 30, // Reduced horizontal padding
-    borderRadius: 5,
-    marginTop: 10, // Added margin to separate it from the row above
+    width: 150, // Set a fixed width for uniform size
+    alignItems: 'center', // Center text horizontally
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 14, // Slightly smaller font size
     textAlign: 'center',
+  },
+  centeredButton: {
+    justifyContent: 'center', // Center content vertically
+    alignItems: 'center', // Center content horizontally
   },
 });

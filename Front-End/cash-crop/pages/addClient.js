@@ -40,7 +40,7 @@ const AddClient = () => {
       })
       .then(data => {
         if (data.success) {
-          alert('Success', 'User has been registered successfully');
+          Alert.alert('Success', 'User has been registered successfully');
           setUsername('');
           setMemberID('');
           setPassword('');
@@ -52,8 +52,14 @@ const AddClient = () => {
       })
       .catch(error => {
         console.error('Error:', error);
-        setError('Member ID Must Be Unique. Please try again.');
+        setError('Member ID must be unique. Please try again.');
       });
+  };
+
+  // Function to handle member ID input
+  const handleMemberIDChange = (text) => {
+    const numericValue = text.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    setMemberID(numericValue);
   };
 
   return (
@@ -70,7 +76,8 @@ const AddClient = () => {
           style={styles.input}
           placeholder="Member ID"
           value={memberID}
-          onChangeText={setMemberID}
+          onChangeText={handleMemberIDChange}
+          keyboardType="numeric" // Ensures numeric keyboard
         />
         <TextInput
           style={styles.input}
