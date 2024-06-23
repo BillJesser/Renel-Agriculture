@@ -33,7 +33,6 @@ export default function RegisterScreen({ navigation }) {
 
     try {
       const url = `http://${ip}/register`;
-      console.log(`Fetching from URL: ${url}`);
 
       const response = await fetch(url, {
         method: 'POST',
@@ -56,6 +55,12 @@ export default function RegisterScreen({ navigation }) {
       setLoading(false);
       console.error("An error occurred during registration:", error);
     }
+  };
+
+  // Function to handle member ID input
+  const handleMemberIdChange = (text) => {
+    const numericValue = text.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    setMemberId(numericValue);
   };
 
   return (
@@ -81,7 +86,8 @@ export default function RegisterScreen({ navigation }) {
           placeholder="Member ID"
           placeholderTextColor="#888"
           value={memberId}
-          onChangeText={setMemberId}
+          onChangeText={handleMemberIdChange}
+          keyboardType="numeric" // Ensures numeric keyboard
         />
         <TextInput
           style={styles.input}

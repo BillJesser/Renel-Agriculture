@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, ImageBackground, Image, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,7 +14,7 @@ export default function HomeScreen({ navigation }) {
   const ip = useContext(IpContext); // Access the IP address
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       setPassword('');
       setMemberId('');
     }, [])
@@ -60,6 +60,12 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
+  // Function to handle member ID input
+  const handleMemberIdChange = (text) => {
+    const numericValue = text.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    setMemberId(numericValue);
+  };
+
   return (
     <ImageBackground
       source={farmerImage}
@@ -71,13 +77,13 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.title}>₵ash Crop</Text>
         <Text style={styles.subtitle}>Agriculture Companion</Text>
 
-
         <TextInput
           style={styles.input}
           placeholder="Member ID"
           placeholderTextColor="#888"
           value={memberId}
-          onChangeText={text => setMemberId(text)}
+          onChangeText={handleMemberIdChange}
+          keyboardType="numeric" // Ensures numeric keyboard
         />
         <TextInput
           style={styles.input}
@@ -85,7 +91,7 @@ export default function HomeScreen({ navigation }) {
           placeholderTextColor="#888"
           secureTextEntry
           value={password}
-          onChangeText={text => setPassword(text)}
+          onChangeText={setPassword}
         />
 
         {loading ? (
