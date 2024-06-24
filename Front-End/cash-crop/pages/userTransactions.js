@@ -110,7 +110,7 @@ export default function FinancesScreen({ navigation, route }) {
 
   // Placeholder function for handling edit data action
   const handleEditData = () => {
-    alert('Edit Data pressed');
+    navigation.navigate('EditUserFinances', {memberID: memberID, username: username,refreshTransactions: fetchTransactions});
   };
 
   // Render loading state

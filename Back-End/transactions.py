@@ -78,4 +78,20 @@ def insert_data(form_data):
         except OperationFailure as e:
             print("Data insertion failed:", e)
             return {"status": "error", "message": str(e)}
+        
+def update_transactions(member_id, new_transactions):
+    try:
+        result = transactions.update_one(
+            {"member_id": member_id},
+            {"$set": {"Transactions": new_transactions}}
+        )
+        if result.matched_count > 0:
+            return {"status": "updated", "member_id": member_id}
+        else:
+            return {"status": "error", "message": "Member not found"}
+    except OperationFailure as e:
+        print("Data update failed:", e)
+        return {"status": "error", "message": str(e)}
+    
+
 

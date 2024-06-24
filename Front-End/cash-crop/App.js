@@ -27,9 +27,13 @@ import AdminTutorial from './pages/adminTutorial';
 import AdminInputData from './pages/adminInputData';
 import Groundnut from './pages/groundnut';
 import Rice from './pages/rice';
+import EditUserFinances from './pages/editUserFinances'
 
 // Define Stack Navigator
 const Stack = createStackNavigator();
+
+const ipAddress = '192.168.1.73:5000';  
+
 
 // IP address for the server
 const ipAddress = '192.168.1.85:5000';
@@ -66,6 +70,7 @@ export default function App() {
           <Stack.Screen name="AdminInputData" component={AdminInputData} options={{ title: 'Admin Input Data' }} />
           <Stack.Screen name="Groundnut" component={Groundnut} options={{ title: 'Groundnut' }} />
           <Stack.Screen name="Rice" component={Rice} options={{ title: 'Rice' }} />
+          <Stack.Screen name="EditUserFinances" component={EditUserFinances} options={{ title: 'Edit User Finances' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </IpProvider>
