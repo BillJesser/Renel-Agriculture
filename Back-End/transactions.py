@@ -15,6 +15,15 @@ db = client["cashcrop"]
 transactions = db["transactions"]
 
 def insert_data(form_data):
+    """
+    Inserts or updates transaction data into the MongoDB collection based on memberID.
+
+    Args:
+    - form_data (dict): Contains transaction data fields.
+
+    Returns:
+    - dict: Status of the insertion or update operation.
+    """
     member_id = form_data['memberId']
     existing_member = transactions.find_one({"member_id": member_id})
 
@@ -86,80 +95,3 @@ def update_transactions(member_id, new_transactions):
     
 
 
-# test_data = {
-#     "Transaction dates": [
-#         "05-01-2023",
-#         "06-15-2023",
-#         "07-30-2023"
-#     ],
-#     "Saving Contributions": [
-#         "100",
-#         "150",
-#         "200"
-#     ],
-#     "Cumulative savings": [
-#         "100",
-#         "250",
-#         "450"
-#     ],
-#     "Loan amount": [
-#         "5000",
-#         "",
-#         ""
-#     ],
-#     "Loan date": [
-#         "04-01-2023",
-#         "",
-#         ""
-#     ],
-#     "Repayment Due Date": [
-#         "04-15-2023",
-#         "",
-#         ""
-#     ],
-#     "Loan Repayment": [
-#         "1000",
-#         "",
-#         ""
-#     ],
-#     "Outstanding Loan Balance": [
-#         "4000",
-#         "",
-#         ""
-#     ],
-#     "Interest Paid": [
-#         "50",
-#         "",
-#         ""
-#     ],
-#     "Dividend": [
-#         "",
-#         "",
-#         ""
-#     ],
-#     "Purpose of Loan": [
-#         "Home improvement",
-#         "",
-#         ""
-#     ],
-#     "Remarks": [
-#         "Initial loan setup",
-#         "",
-#         ""
-#     ]
-# }
-
-
-
-# def test_update_transactions():
-#     member_id = "0002"  # Replace with the member_id you want to test
-#     result = update_transactions(member_id, test_data)
-    
-#     if result["status"] == "updated":
-#         print(f"Transactions updated successfully for member_id {member_id}")
-#     elif result["status"] == "error":
-#         print(f"Error: {result['message']}")
-
-# # Run the test case
-# if __name__ == "__main__":
-#     test_update_transactions()

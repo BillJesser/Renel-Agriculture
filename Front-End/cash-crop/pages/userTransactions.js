@@ -19,6 +19,7 @@ export default function FinancesScreen({ navigation, route }) {
     }
   }, [memberID]);
 
+  // Function to fetch transactions based on memberID
   const fetchTransactions = async (memberID) => {
     try {
       const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
@@ -32,10 +33,12 @@ export default function FinancesScreen({ navigation, route }) {
     }
   };
 
+  // Navigate to AdminInputData screen
   const handleInputNewData = () => {
     navigation.navigate('AdminInputData', { memberID: memberID, username: username, refreshTransactions: fetchTransactions });
   };
 
+  // Handle printing the transactions as a PDF
   const handlePrintPaper = async () => {
     if (!transactions) {
       alert('No transactions available to generate PDF.');
@@ -43,7 +46,7 @@ export default function FinancesScreen({ navigation, route }) {
     }
 
     try {
-      // Generate HTML content
+      // Generate HTML content for PDF
       const htmlContent = `
         <html>
           <head>
@@ -97,7 +100,7 @@ export default function FinancesScreen({ navigation, route }) {
         </html>
       `;
 
-      // Print the HTML content
+      // Print the HTML content as a PDF
       await Print.printAsync({ html: htmlContent });
     } catch (error) {
       console.error('Failed to print document:', error);
@@ -105,10 +108,12 @@ export default function FinancesScreen({ navigation, route }) {
     }
   };
 
+  // Placeholder function for handling edit data action
   const handleEditData = () => {
     navigation.navigate('EditUserFinances', {memberID: memberID, username: username,refreshTransactions: fetchTransactions});
   };
 
+  // Render loading state
   if (loading) {
     return (
       <View style={styles.container}>
@@ -117,6 +122,7 @@ export default function FinancesScreen({ navigation, route }) {
     );
   }
 
+  // Render error state if data fetching failed
   if (error) {
     return (
       <View style={styles.container}>
@@ -125,6 +131,7 @@ export default function FinancesScreen({ navigation, route }) {
     );
   }
 
+  // Define table header
   const tableHead = [
     'Transaction Dates',
     'Saving Contributions',
@@ -157,6 +164,7 @@ export default function FinancesScreen({ navigation, route }) {
       transactions.remarks[index] || ''
     ]) : [['', '', '', '', '', '', '', '', '', '', '', '']]; // Show message if no data
 
+  // Width array for table columns
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
   return (
@@ -268,3 +276,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+

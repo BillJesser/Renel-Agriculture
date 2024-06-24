@@ -11,8 +11,7 @@ const GoogleDriveEmbed = () => {
   const fileUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
 
-  const download = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
-
+  const downloadUrl = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`; // URL for direct download
 
   // Embed HTML for Google Drive file preview
   const embedHtml = `
@@ -30,7 +29,7 @@ const GoogleDriveEmbed = () => {
         text: 'OK',
         onPress: () => {
           // Open the URL in the default browser to start the download
-          Linking.openURL(download).catch(err => console.error('An error occurred', err));
+          Linking.openURL(downloadUrl).catch(err => console.error('An error occurred', err));
         },
       },
     ]);
@@ -39,16 +38,14 @@ const GoogleDriveEmbed = () => {
   // Function to handle file sharing
   const handleShare = async () => {
     try {
-      const fileUri = `${FileSystem.documentDirectory}${fileId}.pdf`; // Assuming the file is a PDF
-      const downloadResumable = FileSystem.createDownloadResumable(
-        fileUrl,
-        fileUri
-      );
+      const fileUri = `${FileSystem.documentDirectory}${fileId}.pdf`; // File URI where it will be stored (assuming PDF)
+      const downloadResumable = FileSystem.createDownloadResumable(fileUrl, fileUri);
 
-      const { uri } = await downloadResumable.downloadAsync();
-      const canShare = await Sharing.isAvailableAsync();
+      const { uri } = await downloadResumable.downloadAsync(); // Download the file asynchronously
+
+      const canShare = await Sharing.isAvailableAsync(); // Check if sharing is available on the device
       if (canShare) {
-        await Sharing.shareAsync(uri);
+        await Sharing.shareAsync(uri); // Share the downloaded file
       } else {
         Alert.alert('Error', 'Sharing is not available on this device');
       }
@@ -57,19 +54,24 @@ const GoogleDriveEmbed = () => {
     }
   };
 
+  // Component render method
   return (
     <SafeAreaView style={styles.container}>
+      {/* WebView to render the embedded Google Drive preview */}
       <WebView
         originWhitelist={['*']}
         source={{ html: embedHtml }}
         style={styles.webview}
       />
+      {/* Button container for download and share buttons */}
       <View style={styles.buttonContainer}>
+        {/* Download button */}
         <Button
           title="Download File"
           onPress={handleDownload}
           color="#080" // Green color
         />
+        {/* Share button */}
         <Button
           title="Share File"
           onPress={handleShare}

@@ -13,7 +13,6 @@ const GoogleDriveEmbed = () => {
 
   const download = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
 
-
   // Embed HTML for Google Drive file preview
   const embedHtml = `
     <html>

@@ -7,12 +7,15 @@ import * as FileSystem from 'expo-file-system';
 
 // Your component to render the embedded file and buttons
 const GoogleDriveEmbed = () => {
-  const fileId = '1jObLHTVmRYTbd0T1YOrBYZtSR3nSyT7g'; // Replace with your actual file ID
+  // Replace with your actual file ID from Google Drive
+  const fileId = '1jObLHTVmRYTbd0T1YOrBYZtSR3nSyT7g';
+
+  // URLs for file operations
   const fileUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
 
+  // URL for direct download from Google Drive
   const download = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
-
 
   // Embed HTML for Google Drive file preview
   const embedHtml = `
@@ -39,14 +42,22 @@ const GoogleDriveEmbed = () => {
   // Function to handle file sharing
   const handleShare = async () => {
     try {
+      // Prepare the local file URI where the file will be downloaded
       const fileUri = `${FileSystem.documentDirectory}${fileId}.pdf`; // Assuming the file is a PDF
+
+      // Create a download resumable object
       const downloadResumable = FileSystem.createDownloadResumable(
-        fileUrl,
-        fileUri
+        fileUrl, // Remote URL of the file
+        fileUri   // Local URI where the file will be saved
       );
 
+      // Start downloading the file asynchronously
       const { uri } = await downloadResumable.downloadAsync();
+
+      // Check if sharing is available on the device
       const canShare = await Sharing.isAvailableAsync();
+
+      // Share the downloaded file if sharing is available
       if (canShare) {
         await Sharing.shareAsync(uri);
       } else {
@@ -57,23 +68,27 @@ const GoogleDriveEmbed = () => {
     }
   };
 
+  // Render the component
   return (
     <SafeAreaView style={styles.container}>
+      {/* WebView to render the Google Drive file preview */}
       <WebView
         originWhitelist={['*']}
         source={{ html: embedHtml }}
         style={styles.webview}
       />
+
+      {/* Container for download and share buttons */}
       <View style={styles.buttonContainer}>
         <Button
           title="Download File"
           onPress={handleDownload}
-          color="#080" // Green color
+          color="#080" // Green color for the button text
         />
         <Button
           title="Share File"
           onPress={handleShare}
-          color="#080" // Green color
+          color="#080" // Green color for the button text
         />
       </View>
     </SafeAreaView>
@@ -95,4 +110,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Export the component as the default export
 export default GoogleDriveEmbed;

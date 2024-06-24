@@ -1,15 +1,18 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from users import *
-from transactions import *
+from users import *  # Assuming this imports functions related to user management
+from transactions import *  # Assuming this imports functions related to transactions
+import pymongo as pym
 
 app = Flask(__name__)
 client = pym.MongoClient("mongodb://localhost:27017")
 
+# MongoDB database and collection setup
 db = client["cashcrop"]
 transactions = db["transactions"]
 
-@app.route("/register", methods=["GET","POST"], endpoint="register_client")
+# Route for registering a new client
+@app.route("/register", methods=["POST"])
 @cross_origin()
 def register_client():
     data = request.json
@@ -23,10 +26,10 @@ def register_client():
     if success:
         return jsonify({"message": "User registered successfully"})
     else:
-        return jsonify({"error": "MemberID Must Be Unique From Other Users"}), 400
-    
+        return jsonify({"error": "MemberID must be unique from other users"}), 400
 
-@app.route("/login", methods=["POST"], endpoint="login_user")
+# Route for user login
+@app.route("/login", methods=["POST"])
 @cross_origin()
 def login_user():
     data = request.json
@@ -48,8 +51,8 @@ def login_user():
         )
     return jsonify({"message": "Incorrect username, member ID, or password."}), 401
 
-
-@app.route("/search_user", methods=["GET"], endpoint="search_user")
+# Route for searching users by username (case-insensitive)
+@app.route("/search_user", methods=["GET"])
 @cross_origin()
 def search_user():
     query = request.args.get('query', '')
@@ -59,6 +62,7 @@ def search_user():
         return jsonify(user_list)
     return jsonify([])
 
+# Route for fetching transactions for a specific user
 @app.route('/user_transactions', methods=['GET'])
 @cross_origin()
 def user_transactions():
@@ -79,14 +83,13 @@ def user_transactions():
                 'dividend': member_transactions['Transactions']['Dividend'],
                 'purposeOfLoan': member_transactions['Transactions']['Purpose of Loan'],
                 'remarks': member_transactions['Transactions']['Remarks']
-
             }
             return jsonify(result)
     
     return jsonify({"error": "No transactions found for the given member ID"}), 404
 
-
-@app.route("/add_client", methods=["GET","POST"])
+# Route for adding a new client (registering a new user)
+@app.route("/add_client", methods=["POST"])
 @cross_origin()
 def add_client():
     data = request.json
@@ -100,9 +103,10 @@ def add_client():
     if success:
         return jsonify({"success": "User registered successfully"})
     else:
-        return jsonify({"error": "MemberID Must Be Unique From Other Users"}), 400
-    
-@app.route("/add_admin", methods=["GET","POST"])
+        return jsonify({"error": "MemberID must be unique from other users"}), 400
+
+# Route for adding a new admin
+@app.route("/add_admin", methods=["POST"])
 @cross_origin()
 def add_admin():
     data = request.json
@@ -115,22 +119,21 @@ def add_admin():
     if success:
         return jsonify({"success": "Admin registered successfully"})
     else:
-        return jsonify({"error": "AdminID Must Be Unique From Other Admins"}), 400
+        return jsonify({"error": "AdminID must be unique from other admins"}), 400
 
-
-
+# Route for inserting new data (assuming this is related to transaction data)
 @app.route('/insert', methods=['POST'])
 @cross_origin()
 def handle_new_input():
     form_data = request.json
     result = insert_data(form_data)
     if result["status"] == "inserted":
-            return jsonify({"status": "success", "inserted_id": str(result["inserted_id"])}), 201
+        return jsonify({"status": "success", "inserted_id": str(result["inserted_id"])}), 201
     elif result["status"] == "updated":
         return jsonify({"status": "success", "message": f"Member ID {result['member_id']} updated successfully."}), 200
     else:
         return jsonify({"status": "error", "message": result["message"]}), 500
-    
+
     
 @app.route('/updateFinance', methods=['POST'])
 @cross_origin()
@@ -145,6 +148,7 @@ def handle_update_finance():
         return jsonify({"status": "error", "message": result["message"]}), 500
     
     
+
 @app.route('/update_user', methods=['POST'])
 @cross_origin()
 def update_user():
@@ -168,9 +172,7 @@ def update_user():
                 hash_pass = hash_function(new_password)
                 existing_user['password'] = hash_pass
 
-           
             users.update_one({'memberID': memberID}, {'$set': existing_user})
-           
 
             # Prepare response
             response_data = {'message': 'User information updated successfully'}
@@ -184,7 +186,7 @@ def update_user():
 
     return jsonify({'error': 'User not found'}), 404
 
-
+# Route for deleting a user by memberID
 @app.route('/delete_user/<memberID>', methods=['DELETE'])
 @cross_origin()
 def delete_user(memberID):
@@ -197,8 +199,10 @@ def delete_user(memberID):
         return jsonify({'message': 'User deleted successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
-    
+
+# Main entry point of the application
 if __name__ == "__main__":
+    # Enable CORS for all routes
     cors = CORS(app)
+    # Run the Flask app on host 0.0.0.0 (accessible from any network interface)
     app.run(host='0.0.0.0')

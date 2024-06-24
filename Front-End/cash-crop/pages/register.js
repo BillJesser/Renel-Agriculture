@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, ImageBackground, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ImageBackground, Image, ActivityIndicator, Alert } from 'react-native';
 import { IpContext } from '../IpContext'; // Import the context
 
+// Importing background and logo images
 const farmerImage = require('../assets/farmer1.jpeg');
 const renelImage = require('../assets/renellogo.png');
 
 export default function RegisterScreen({ navigation }) {
+  // State variables for form inputs and loading state
   const [username, setUsername] = useState('');
   const [memberId, setMemberId] = useState('');
   const [password, setPassword] = useState('');
@@ -13,27 +15,30 @@ export default function RegisterScreen({ navigation }) {
   const [loading, setLoading] = useState(false); // Define the loading state
   const ip = useContext(IpContext); // Access the IP address
 
+  // Function to handle registration process
   const handleRegister = async () => {
+    // Validate form inputs
     if (!username || !memberId || !password) {
-      alert('Username, Member ID, and password are required');
+      Alert.alert('Error', 'Username, Member ID, and password are required');
       return;
     }
 
     if (username && memberId && password && !confirmPassword) {
-      alert('Please confirm your password');
+      Alert.alert('Error', 'Please confirm your password');
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      Alert.alert('Error', 'Passwords do not match');
       return;
     }
 
-    setLoading(true);
+    setLoading(true); // Set loading state to true
 
     try {
       const url = `http://${ip}/register`;
 
+      // Send registration request to server
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -43,21 +48,23 @@ export default function RegisterScreen({ navigation }) {
       });
 
       const data = await response.json();
-      setLoading(false);
+      setLoading(false); // Reset loading state
 
+      // Handle registration success or failure
       if (response.ok) {
-        alert(data.message);
+        Alert.alert('Success', data.message);
         navigation.navigate('Home');
       } else {
-        alert(data.error);
+        Alert.alert('Error', data.error);
       }
     } catch (error) {
-      setLoading(false);
-      console.error("An error occurred during registration:", error);
+      setLoading(false); // Reset loading state
+      console.error('An error occurred during registration:', error);
+      Alert.alert('Error', 'Something went wrong. Please try again.');
     }
   };
 
-  // Function to handle member ID input
+  // Function to handle member ID input and restrict to numeric characters
   const handleMemberIdChange = (text) => {
     const numericValue = text.replace(/[^0-9]/g, ''); // Remove non-numeric characters
     setMemberId(numericValue);
@@ -74,6 +81,7 @@ export default function RegisterScreen({ navigation }) {
         <Text style={styles.title}>Register</Text>
         <Text style={styles.subtitle}>Create a new account</Text>
 
+        {/* Username input field */}
         <TextInput
           style={styles.input}
           placeholder="Username"
@@ -81,6 +89,8 @@ export default function RegisterScreen({ navigation }) {
           value={username}
           onChangeText={setUsername}
         />
+
+        {/* Member ID input field */}
         <TextInput
           style={styles.input}
           placeholder="Member ID"
@@ -89,6 +99,8 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={handleMemberIdChange}
           keyboardType="numeric" // Ensures numeric keyboard
         />
+
+        {/* Password input field */}
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -97,6 +109,8 @@ export default function RegisterScreen({ navigation }) {
           value={password}
           onChangeText={setPassword}
         />
+
+        {/* Confirm Password input field */}
         <TextInput
           style={styles.input}
           placeholder="Confirm Password"
@@ -106,6 +120,7 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={setConfirmPassword}
         />
 
+        {/* Conditional rendering of loading indicator or register button */}
         {loading ? (
           <ActivityIndicator size="large" color="#080" />
         ) : (
@@ -118,6 +133,7 @@ export default function RegisterScreen({ navigation }) {
   );
 }
 
+// Styles for the component
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,

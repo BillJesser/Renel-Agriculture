@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-
 import { StyleSheet, Text, View, TextInput, Button, ScrollView, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IpContext } from '../IpContext';
 
 const backgroundImage = require('../assets/farmer1.jpeg');
 
-
 export default function InputDataScreen({ navigation, route }) {
+  // State to manage form data
   const [formData, setFormData] = useState({
     memberId: '',
     memberName: '',
@@ -24,15 +23,18 @@ export default function InputDataScreen({ navigation, route }) {
     purposeOfLoan: '',
     remarks: ''
   });
-  const ip = useContext(IpContext); // Access the IP address
-  const { refreshTransactions } = route.params; // Extract the refreshTransactions callback
 
+  const ip = useContext(IpContext); // Access the IP address from context
+  const { refreshTransactions } = route.params; // Extract the refreshTransactions callback from route params
+
+  // Effect to fetch user data from AsyncStorage on component mount
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const username = await AsyncStorage.getItem('username');
         const memberId = await AsyncStorage.getItem('memberID');
         if (username && memberId) {
+          // Update formData state with fetched user data
           setFormData((prevData) => ({
             ...prevData,
             memberName: username,
@@ -47,10 +49,12 @@ export default function InputDataScreen({ navigation, route }) {
     fetchUserData();
   }, []);
 
+  // Function to handle input changes in the form fields
   const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Function to handle form submission
   const handleSubmit = async () => {
     try {
       const response = await fetch(`http://${ip}/insert`, {
@@ -64,7 +68,7 @@ export default function InputDataScreen({ navigation, route }) {
       if (response.ok) {
         const result = await response.json();
         Alert.alert("Success", `Data inserted`);
-        navigation.goBack();
+        navigation.goBack(); // Navigate back after successful submission
         refreshTransactions(formData.memberId); // Trigger refresh of transactions on Finance screen
       } else {
         Alert.alert("Error", "Failed to insert data");
@@ -75,23 +79,28 @@ export default function InputDataScreen({ navigation, route }) {
     }
   };
 
+  // Component render method
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
       <ScrollView contentContainerStyle={styles.container}>
+        {/* Render each form input dynamically */}
         {Object.keys(formData).map((key) => (
           <View key={key} style={styles.inputContainer}>
             <Text style={styles.label}>
+              {/* Format the label text (camelCase to spaced) */}
               {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
             </Text>
+            {/* Text input field */}
             <TextInput
               style={[styles.input, (key === 'memberId' || key === 'memberName') && styles.readOnlyInput]}
               value={formData[key]}
               onChangeText={(value) => handleChange(key, value)}
               placeholder={key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''}
-              editable={!(key === 'memberId' || key === 'memberName')}
+              editable={!(key === 'memberId' || key === 'memberName')} // Disable editing for memberId and memberName
             />
           </View>
         ))}
+        {/* Button to submit the form */}
         <View style={styles.buttonContainer}>
           <Button title="Submit" onPress={handleSubmit} color="#4CAF50" />
         </View>
@@ -100,6 +109,7 @@ export default function InputDataScreen({ navigation, route }) {
   );
 }
 
+// Styles for the component
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
@@ -127,10 +137,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff', // Ensure input box is white over the background
   },
   readOnlyInput: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f0f0f0', // Gray background for read-only inputs
   },
   buttonContainer: {
     marginTop: 20,
   },
 });
-

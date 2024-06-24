@@ -1,30 +1,35 @@
+// Import necessary modules and components from React and React Native
 import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet, Text, ImageBackground } from 'react-native';
-import { IpContext } from '../IpContext'; // Import the context
+import { IpContext } from '../IpContext'; // Import the context for IP address
 
-const backgroundImage = require('../assets/farmer1.jpeg');
+const backgroundImage = require('../assets/farmer1.jpeg'); // Background image
 
 const AddClient = () => {
+  // Define state variables for user inputs and errors
   const [username, setUsername] = useState('');
   const [memberID, setMemberID] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const ip = useContext(IpContext); // Access the IP address
+  const ip = useContext(IpContext); // Get IP address from context
 
+  // Function to handle registering a new client
   const handleRegister = () => {
-    if (!username || !memberID || !password || !confirmPassword) {
+    if (!username || !memberID || !password || !confirmPassword) { // Check if all fields are filled
       setError('All fields are required.');
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (password !== confirmPassword) { // Check if passwords match
       setError('Passwords do not match.');
       return;
     }
 
+    // Prepare new client information
     const newUser = { username, memberID, password };
 
+    // Send POST request to add new client
     fetch(`http://${ip}/add_client`, {
       method: 'POST',
       headers: {
@@ -40,29 +45,31 @@ const AddClient = () => {
       })
       .then(data => {
         if (data.success) {
-          Alert.alert('Success', 'User has been registered successfully');
+          Alert.alert('Success', 'User has been registered successfully'); // Show success message
+          // Clear input fields
           setUsername('');
           setMemberID('');
           setPassword('');
           setConfirmPassword('');
           setError('');
         } else {
-          setError(data.message);
+          setError(data.message); // Show error message
         }
       })
       .catch(error => {
-        console.error('Error:', error);
-        setError('Member ID must be unique. Please try again.');
+        console.error('Error:', error); // Log error
+        setError('Member ID must be unique. Please try again.'); // Show error message
       });
   };
 
-  // Function to handle member ID input
+  // Function to handle member ID input and allow only numeric values
   const handleMemberIDChange = (text) => {
     const numericValue = text.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-    setMemberID(numericValue);
+    setMemberID(numericValue); // Set member ID
   };
 
   return (
+    // Display background image
     <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
       <View style={styles.overlay}>
         <Text style={styles.title}>Add Client</Text>
@@ -70,36 +77,37 @@ const AddClient = () => {
           style={styles.input}
           placeholder="Username"
           value={username}
-          onChangeText={setUsername}
+          onChangeText={setUsername} // Update username input
         />
         <TextInput
           style={styles.input}
           placeholder="Member ID"
           value={memberID}
-          onChangeText={handleMemberIDChange}
+          onChangeText={handleMemberIDChange} // Update member ID input
           keyboardType="numeric" // Ensures numeric keyboard
         />
         <TextInput
           style={styles.input}
           placeholder="Password"
           value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
+          onChangeText={setPassword} // Update password input
+          secureTextEntry={true} // Hide password input
         />
         <TextInput
           style={styles.input}
           placeholder="Confirm Password"
           value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry={true}
+          onChangeText={setConfirmPassword} // Update confirm password input
+          secureTextEntry={true} // Hide confirm password input
         />
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-        <Button title="Register" onPress={handleRegister} color="#080" />
+        {error ? <Text style={styles.error}>{error}</Text> : null} // Display error message if any
+        <Button title="Register" onPress={handleRegister} color="#080" /> // Register button
       </View>
     </ImageBackground>
   );
 };
 
+// Define styles for the component
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
@@ -137,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddClient;
+export default AddClient; // Export the component as default

@@ -1,7 +1,9 @@
-// App.js
+// Import necessary libraries
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
+// Import all screens used in the app
 import HomeScreen from './pages/login';
 import RegisterScreen from './pages/register';
 import DashboardScreen from './pages/userDashboard';
@@ -27,15 +29,25 @@ import Groundnut from './pages/groundnut';
 import Rice from './pages/rice';
 import EditUserFinances from './pages/editUserFinances'
 
+// Define Stack Navigator
 const Stack = createStackNavigator();
+
 const ipAddress = '192.168.1.73:5000';  
 
+
+// IP address for the server
+const ipAddress = '192.168.1.85:5000';
+
+// Main component App
 export default function App() {
   return (
-
+    // Provide IP address through IpProvider context
     <IpProvider initialIp={ipAddress}>
+      {/* Navigation container for the entire app */}
       <NavigationContainer>
+        {/* Stack Navigator for managing navigation between screens */}
         <Stack.Navigator initialRouteName="Home">
+          {/* Define screens with their respective components and navigation options */}
           <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Cash Crop' }} />
           <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
           <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Dashboard', headerLeft: null }} />
@@ -62,6 +74,5 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </IpProvider>
-
   );
 }
