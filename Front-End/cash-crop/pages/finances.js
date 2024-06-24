@@ -1,3 +1,4 @@
+// Import necessary libraries
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
@@ -8,59 +9,68 @@ import { IpContext } from '../IpContext';
 const backgroundImage = require('../assets/farmer1.jpeg');
 
 export default function FinancesScreen({ navigation }) {
+  // State variables
   const [username, setUsername] = useState('');
   const [memberID, setMemberID] = useState('');
   const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const ip = useContext(IpContext);
+  const ip = useContext(IpContext); // Accessing context for IP address
 
+  // Fetch user data on component mount
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        // Retrieve stored username and memberID from AsyncStorage
         const storedUsername = await AsyncStorage.getItem('username');
         const storedMemberID = await AsyncStorage.getItem('memberID');
+
+        // Update state with retrieved data if available
         if (storedUsername !== null) {
           setUsername(storedUsername);
         }
         if (storedMemberID !== null) {
           setMemberID(storedMemberID);
-          fetchTransactions(storedMemberID);
+          fetchTransactions(storedMemberID); // Fetch transactions for the member
         }
       } catch (error) {
         console.error('Failed to load user data:', error);
-        setLoading(false);
+        setLoading(false); // Set loading to false on error
       }
     };
 
-    fetchUserData();
-  }, []);
+    fetchUserData(); // Call fetchUserData function
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
+  // Function to fetch transactions for a given member ID
   const fetchTransactions = async (memberID) => {
     try {
+      // Fetch transactions from server using IP context and member ID
       const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
-      const data = await response.json();
-      setTransactions(data);
-      setLoading(false);
+      const data = await response.json(); // Parse response as JSON
+      setTransactions(data); // Update state with fetched transactions
+      setLoading(false); // Set loading to false after successful fetch
     } catch (error) {
       console.error('Failed to fetch transactions:', error);
-      setError('Error fetching data. Please try again.');
-      setLoading(false);
+      setError('Error fetching data. Please try again.'); // Set error message on fetch failure
+      setLoading(false); // Set loading to false on error
     }
   };
 
+  // Navigate to 'InputData' screen when user wants to input new data
   const handleInputNewData = () => {
     navigation.navigate('InputData', { refreshTransactions: fetchTransactions });
   };
 
+  // Function to handle printing of transaction data as a PDF
   const handlePrintPaper = async () => {
     if (!transactions) {
-      alert('No transactions available to generate PDF.');
+      alert('No transactions available to generate PDF.'); // Alert if no transactions available
       return;
     }
 
     try {
-      // Generate HTML content
+      // Generate HTML content for printing
       const htmlContent = `
         <html>
           <head>
@@ -114,14 +124,15 @@ export default function FinancesScreen({ navigation }) {
         </html>
       `;
 
-      // Print the HTML content
+      // Print the HTML content as PDF using Expo Print
       await Print.printAsync({ html: htmlContent });
     } catch (error) {
       console.error('Failed to print document:', error);
-      alert('Failed to print document. Please try again.');
+      alert('Failed to print document. Please try again.'); // Alert user on print failure
     }
   };
 
+  // Render loading message while data is being fetched
   if (loading) {
     return (
       <View style={styles.container}>
@@ -130,6 +141,7 @@ export default function FinancesScreen({ navigation }) {
     );
   }
 
+  // Render error message if there was an error fetching data
   if (error) {
     return (
       <View style={styles.container}>
@@ -138,6 +150,7 @@ export default function FinancesScreen({ navigation }) {
     );
   }
 
+  // Table header columns
   const tableHead = [
     'Transaction Dates',
     'Saving Contributions',
@@ -153,6 +166,7 @@ export default function FinancesScreen({ navigation }) {
     'Remarks'
   ];
 
+  // Table data rows, default to empty rows if no transactions available
   const tableData = transactions && transactions.transaction_dates && transactions.transaction_dates.length > 0 ?
     transactions.transaction_dates.map((_, index) => [
       transactions.transaction_dates[index] || '',
@@ -169,6 +183,7 @@ export default function FinancesScreen({ navigation }) {
       transactions.remarks[index] || ''
     ]) : [['', '', '', '', '', '', '', '', '', '', '', '']]; // Single empty row if no data
 
+  // Widths for table columns
   const widthArr = [140, 140, 140, 140, 140, 140, 140, 160, 140, 120, 160, 160];
 
   return (
@@ -179,7 +194,6 @@ export default function FinancesScreen({ navigation }) {
           <Text style={styles.heading}>Member Name: {username}</Text>
           <Text style={styles.heading}>User ID: {memberID}</Text>
         </View>
-
 
         {/* Scrollable Table */}
         <ScrollView horizontal>
@@ -195,8 +209,7 @@ export default function FinancesScreen({ navigation }) {
           </ScrollView>
         </ScrollView>
 
-
-        {/* Buttons */}
+        {/* Buttons for inputting new data and printing */}
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonRow}>
             <TouchableOpacity style={styles.button} onPress={handleInputNewData}>
@@ -212,6 +225,7 @@ export default function FinancesScreen({ navigation }) {
   );
 }
 
+// Styles for the FinancesScreen component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -277,3 +291,4 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center content horizontally
   },
 });
+

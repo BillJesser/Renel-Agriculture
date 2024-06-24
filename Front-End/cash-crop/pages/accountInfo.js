@@ -1,32 +1,38 @@
+// Import necessary modules and components from React and React Native
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ImageBackground } from 'react-native';
-import { IpContext } from '../IpContext'; // Import the context
+import { IpContext } from '../IpContext'; // Import the context for IP address
 
-const backgroundImage = require('../assets/farmer1.jpeg');
+const backgroundImage = require('../assets/farmer1.jpeg'); // Background image
 
 const AccountInfo = ({ route, navigation }) => {
+  // Extract memberID and username from route parameters
   const { memberID, username } = route.params;
 
+  // Define state variables for user inputs and errors
   const [memberIDInput, setMemberIDInput] = useState(memberID);
   const [usernameInput, setUsernameInput] = useState(username);
   const [passwordInput, setPasswordInput] = useState('');
   const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
   const [error, setError] = useState('');
-  const ip = useContext(IpContext);
+  const ip = useContext(IpContext); // Get IP address from context
 
+  // Function to handle saving user information
   const handleSave = async () => {
-    if (passwordInput !== confirmPasswordInput) {
+    if (passwordInput !== confirmPasswordInput) { // Check if passwords match
       setError('Passwords do not match');
       return;
     }
 
+    // Prepare updated information
     const updatedInfo = {
       memberID: memberIDInput,
-      ...(usernameInput !== username && { username: usernameInput }),
-      ...(passwordInput.trim() && { password: passwordInput }),
+      ...(usernameInput !== username && { username: usernameInput }), // Update username if changed
+      ...(passwordInput.trim() && { password: passwordInput }), // Update password if provided
     };
 
     try {
+      // Send POST request to update user information
       const response = await fetch(`http://${ip}/update_user`, {
         method: 'POST',
         headers: {
@@ -37,23 +43,25 @@ const AccountInfo = ({ route, navigation }) => {
 
       const data = await response.json();
       if (response.ok) {
-        Alert.alert('Success', data.message);
+        Alert.alert('Success', data.message); // Show success message
 
-        // Update username and clear passwords if successful
+        // Update state variables if username was changed
         if (data.updatedUsername) {
           setUsernameInput(data.updatedUsername);
         }
+        // Clear password fields
         setPasswordInput('');
         setConfirmPasswordInput('');
       } else {
-        setError(data.error || 'Failed to update information');
+        setError(data.error || 'Failed to update information'); // Show error message
       }
     } catch (error) {
-      console.error('Error:', error);
-      setError('Failed to update information');
+      console.error('Error:', error); // Log error
+      setError('Failed to update information'); // Show error message
     }
   };
 
+  // Function to handle deleting user
   const handleDelete = async () => {
     Alert.alert(
       'Confirm Deletion',
@@ -65,6 +73,7 @@ const AccountInfo = ({ route, navigation }) => {
           style: 'destructive',
           onPress: async () => {
             try {
+              // Send DELETE request to delete user
               const response = await fetch(`http://${ip}/delete_user/${memberID}`, {
                 method: 'DELETE',
                 headers: {
@@ -74,14 +83,14 @@ const AccountInfo = ({ route, navigation }) => {
 
               const data = await response.json();
               if (response.ok) {
-                Alert.alert('Success', data.message);
-                navigation.goBack();
+                Alert.alert('Success', data.message); // Show success message
+                navigation.goBack(); // Navigate back
               } else {
-                setError(data.error || 'Failed to delete user');
+                setError(data.error || 'Failed to delete user'); // Show error message
               }
             } catch (error) {
-              console.error('Error:', error);
-              setError('Failed to delete user');
+              console.error('Error:', error); // Log error
+              setError('Failed to delete user'); // Show error message
             }
           },
         },
@@ -90,6 +99,7 @@ const AccountInfo = ({ route, navigation }) => {
   };
 
   return (
+    // Display background image
     <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
       <View style={styles.overlay}>
         <Text style={styles.title}>Update Member Information</Text>
@@ -98,7 +108,7 @@ const AccountInfo = ({ route, navigation }) => {
           value={memberIDInput}
           onChangeText={setMemberIDInput}
           placeholder="Member ID"
-          editable={false}
+          editable={false} // Member ID is not editable
         />
         <TextInput
           style={styles.input}
@@ -111,24 +121,24 @@ const AccountInfo = ({ route, navigation }) => {
           value={passwordInput}
           onChangeText={setPasswordInput}
           placeholder="Update Password"
-          secureTextEntry
+          secureTextEntry // Hide password input
         />
         <TextInput
           style={styles.input}
           value={confirmPasswordInput}
           onChangeText={setConfirmPasswordInput}
           placeholder="Confirm Password"
-          secureTextEntry
+          secureTextEntry // Hide confirm password input
         />
-        {error ? <Text style={styles.error}>{error}</Text> : null}
+        {error ? <Text style={styles.error}>{error}</Text> : null} // Display error message if any
         <View style={styles.buttonContainer}>
           <View style={styles.fullWidthButton}>
-            <Button title="Save" onPress={handleSave} color="#080" />
+            <Button title="Save" onPress={handleSave} color="#080" /> // Save button
           </View>
         </View>
         <View style={styles.buttonContainer}>
           <View style={styles.fullWidthButton}>
-            <Button title="Delete User" color="red" onPress={handleDelete} />
+            <Button title="Delete User" color="red" onPress={handleDelete} /> // Delete button
           </View>
         </View>
       </View>
@@ -136,6 +146,7 @@ const AccountInfo = ({ route, navigation }) => {
   );
 };
 
+// Define styles for the component
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
@@ -184,4 +195,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccountInfo;
+export default AccountInfo; // Export the component as default

@@ -1,3 +1,4 @@
+// Import necessary libraries
 import React, { useState, useContext, useCallback } from 'react';
 import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -9,9 +10,9 @@ const EditUser = () => {
   const navigation = useNavigation();
   const ip = useContext(IpContext); // Access the IP address
 
+  // Reset state when the screen comes into focus
   useFocusEffect(
     useCallback(() => {
-      // Reset state when the screen comes into focus
       setQuery('');
       setUsers([]);
     }, [])
@@ -71,6 +72,7 @@ const EditUser = () => {
   );
 };
 
+// Styles for the container, searchBackground, searchContainer, innerContainer, noUsersContainer, searchInput, userItem, username, userDetails
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,

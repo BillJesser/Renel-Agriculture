@@ -13,7 +13,6 @@ const GoogleDriveEmbed = () => {
 
   const download = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
 
-
   // Embed HTML for Google Drive file preview
   const embedHtml = `
     <html>
@@ -48,7 +47,7 @@ const GoogleDriveEmbed = () => {
       const { uri } = await downloadResumable.downloadAsync();
       const canShare = await Sharing.isAvailableAsync();
       if (canShare) {
-        await Sharing.shareAsync(uri);
+        await Sharing.shareAsync(uri); // Share the downloaded file
       } else {
         Alert.alert('Error', 'Sharing is not available on this device');
       }
@@ -57,23 +56,28 @@ const GoogleDriveEmbed = () => {
     }
   };
 
+  // Component rendering
   return (
     <SafeAreaView style={styles.container}>
+      {/* WebView to embed and display the Google Drive file */}
       <WebView
         originWhitelist={['*']}
         source={{ html: embedHtml }}
         style={styles.webview}
       />
+      {/* Container for download and share buttons */}
       <View style={styles.buttonContainer}>
+        {/* Download button */}
         <Button
           title="Download File"
           onPress={handleDownload}
-          color="#080" // Green color
+          color="#080" // Green color for the button
         />
+        {/* Share button */}
         <Button
           title="Share File"
           onPress={handleShare}
-          color="#080" // Green color
+          color="#080" // Green color for the button
         />
       </View>
     </SafeAreaView>

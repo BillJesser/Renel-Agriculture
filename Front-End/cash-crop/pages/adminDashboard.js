@@ -1,14 +1,18 @@
+// Import necessary modules and components from React and React Native
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button, ImageBackground, Linking } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button, ImageBackground } from 'react-native';
 
+// Import images
 const backgroundImage = require('../assets/farmer1.jpeg');
 const financeImage = require('../assets/finances.png');
 const tutorialsImage = require('../assets/corn.png');
 const manageAccountsImage = require('../assets/settings.jpg');
 const searchDatabaseImage = require('../assets/search.png');
 
+// Define and export the AdminDashboardScreen component
 export default function AdminDashboardScreen({ navigation }) {
   return (
+    // Display background image
     <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
       <View style={styles.overlay}>
         <Text style={styles.title}>₵ash Crop</Text>
@@ -41,7 +45,7 @@ export default function AdminDashboardScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={styles.logoutButtonContainer}>
-          <Button title="Logout" onPress={() => navigation.navigate('Home')} color="#080" />
+          <Button title="Logout" onPress={() => navigation.navigate('Home')} color="#080" /> // Logout button
         </View>
         <TouchableOpacity style={styles.tutorialLinkContainer} onPress={() => navigation.navigate('AdminTutorial')}>
           <Text style={styles.tutorialLinkText}>Admin Tutorial</Text>
@@ -51,6 +55,7 @@ export default function AdminDashboardScreen({ navigation }) {
   );
 }
 
+// Define styles for the component
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,

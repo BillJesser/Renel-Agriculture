@@ -1,14 +1,17 @@
+// Import necessary modules and components from React and React Native
 import React, { useState, useContext } from 'react';
 import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { IpContext } from '../IpContext'; // Import the context
 
+// Define and export the EditUser component
 const EditUser = () => {
-  const [query, setQuery] = useState('');
-  const [users, setUsers] = useState([]);
-  const navigation = useNavigation();
-  const ip = useContext(IpContext); // Access the IP address
+  const [query, setQuery] = useState(''); // State for search query
+  const [users, setUsers] = useState([]); // State for storing search results
+  const navigation = useNavigation(); // Hook for navigation
+  const ip = useContext(IpContext); // Access the IP address from the context
 
+  // Handle search input change
   const handleSearch = (text) => {
     setQuery(text);
     if (text.length > 0) {
@@ -23,6 +26,7 @@ const EditUser = () => {
     }
   };
 
+  // Handle user item press
   const handleUserPress = (user) => {
     navigation.navigate('UserTransactions', { memberID: user.memberID, username: user.username });
   };
@@ -63,6 +67,7 @@ const EditUser = () => {
   );
 };
 
+// Define styles for the component
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
@@ -127,4 +132,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Export the EditUser component as the default export
 export default EditUser;

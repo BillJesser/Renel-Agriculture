@@ -13,7 +13,6 @@ const GoogleDriveEmbed = () => {
 
   const download = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
 
-
   // Embed HTML for Google Drive file preview
   const embedHtml = `
     <html>
@@ -59,21 +58,23 @@ const GoogleDriveEmbed = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* WebView to embed Google Drive file preview */}
       <WebView
         originWhitelist={['*']}
         source={{ html: embedHtml }}
         style={styles.webview}
       />
+      {/* Button container for download and share buttons */}
       <View style={styles.buttonContainer}>
         <Button
           title="Download File"
           onPress={handleDownload}
-          color="#080" // Green color
+          color="#080" // Green color for the button text
         />
         <Button
           title="Share File"
           onPress={handleShare}
-          color="#080" // Green color
+          color="#080" // Green color for the button text
         />
       </View>
     </SafeAreaView>

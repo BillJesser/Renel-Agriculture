@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from 'react-native';
 
+// Importing background and button images
 const backgroundImage = require('../assets/farmer1.jpeg');
 const editImage = require('../assets/edit.png');
 const computerImage = require('../assets/computer.jpg');
@@ -10,10 +11,15 @@ export default function ManageScreen({ navigation }) {
     return (
         <ImageBackground source={backgroundImage} style={styles.backgroundImage} imageStyle={styles.imageOpacity}>
             <View style={styles.overlay}>
+                {/* App title */}
                 <Text style={styles.title}>₵ash Crop</Text>
+                {/* Screen subtitle */}
                 <Text style={styles.subtitle}>Manage accounts</Text>
+
+                {/* Row of buttons for adding new client and admin */}
                 <View style={styles.buttonRow}>
                     <View style={styles.buttonContainer}>
+                        {/* Navigate to 'Add Client' screen */}
                         <TouchableOpacity onPress={() => navigation.navigate('Add Client')}>
                             <View style={styles.button}>
                                 <Image source={addClientImage} style={styles.image} />
@@ -22,6 +28,7 @@ export default function ManageScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.buttonContainer}>
+                        {/* Navigate to 'Add Admin' screen */}
                         <TouchableOpacity onPress={() => navigation.navigate('Add Admin')}>
                             <View style={styles.button}>
                                 <Image source={computerImage} style={styles.image} />
@@ -30,7 +37,10 @@ export default function ManageScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
+
+                {/* Single button for editing user */}
                 <View style={styles.singleButtonContainer}>
+                    {/* Navigate to 'Edit User' screen */}
                     <TouchableOpacity onPress={() => navigation.navigate('Edit User')}>
                         <View style={styles.button}>
                             <Image source={editImage} style={styles.image} />
@@ -43,6 +53,7 @@ export default function ManageScreen({ navigation }) {
     );
 }
 
+// Styles for the component
 const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
@@ -63,13 +74,13 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         marginBottom: 10,
-        color: '#080',
+        color: '#080', // Green color for the title
     },
     subtitle: {
         fontSize: 30,
         fontWeight: 'bold',
         marginBottom: 30,
-        color: '#080',
+        color: '#080', // Green color for the subtitle
     },
     buttonRow: {
         flexDirection: 'row',
@@ -87,26 +98,27 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     button: {
-        width: 160, // Decreased width
-        height: 160, // Decreased height
+        width: 160, // Decreased width to fit within screen
+        height: 160, // Decreased height to fit within screen
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderWidth: 2,
-        borderColor: '#080',
+        borderColor: '#080', // Green border color
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
         padding: 10,
     },
     image: {
-        width: 120, // Decreased image size
-        height: 120, // Decreased image size
+        width: 120, // Decreased image size to fit within button
+        height: 120, // Decreased image size to fit within button
         resizeMode: 'contain',
     },
     buttonText: {
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 8,
-        color: '#080',
+        color: '#080', // Green color for the button text
         textAlign: 'center',
     },
 });
+

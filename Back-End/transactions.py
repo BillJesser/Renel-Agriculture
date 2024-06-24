@@ -15,6 +15,15 @@ db = client["cashcrop"]
 transactions = db["transactions"]
 
 def insert_data(form_data):
+    """
+    Inserts or updates transaction data into the MongoDB collection based on memberID.
+
+    Args:
+    - form_data (dict): Contains transaction data fields.
+
+    Returns:
+    - dict: Status of the insertion or update operation.
+    """
     member_id = form_data['memberId']
     existing_member = transactions.find_one({"member_id": member_id})
 
@@ -69,26 +78,4 @@ def insert_data(form_data):
         except OperationFailure as e:
             print("Data insertion failed:", e)
             return {"status": "error", "message": str(e)}
-
-# Sample data to be inserted
-# sample_data = {
-#     "memberId": "M123",
-#     "memberName": "John Doe",
-#     "transactionDate": "2024-06-18",
-#     "savingsContribution": 1000.00,
-#     "cumulativeSavings": 5000.00,
-#     "loanAmount": 2000.00,
-#     "loanDate": "2024-06-01",
-#     "repaymentDueDate": "2024-12-01",
-#     "loanRepayment": 500.00,
-#     "outstandingLoanBalance": 1500.00,
-#     "interestPaid": 50.00,
-#     "dividend": 10.00,
-#     "purposeOfLoan": "Business Expansion",
-#     "remarks": "First loan installment"
-# }
-
-# Calling the insert_data function and printing the result
-
-# Verifying the inserted data
 
