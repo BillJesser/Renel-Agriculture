@@ -106,7 +106,7 @@ export default function FinancesScreen({ navigation, route }) {
   };
 
   const handleEditData = () => {
-    alert('Edit Data pressed');
+    navigation.navigate('EditUserFinances', {memberID: memberID, username: username,refreshTransactions: fetchTransactions});
   };
 
   if (loading) {

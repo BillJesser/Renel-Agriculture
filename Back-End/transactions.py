@@ -69,26 +69,97 @@ def insert_data(form_data):
         except OperationFailure as e:
             print("Data insertion failed:", e)
             return {"status": "error", "message": str(e)}
+        
+def update_transactions(member_id, new_transactions):
+    try:
+        result = transactions.update_one(
+            {"member_id": member_id},
+            {"$set": {"Transactions": new_transactions}}
+        )
+        if result.matched_count > 0:
+            return {"status": "updated", "member_id": member_id}
+        else:
+            return {"status": "error", "message": "Member not found"}
+    except OperationFailure as e:
+        print("Data update failed:", e)
+        return {"status": "error", "message": str(e)}
+    
 
-# Sample data to be inserted
-# sample_data = {
-#     "memberId": "M123",
-#     "memberName": "John Doe",
-#     "transactionDate": "2024-06-18",
-#     "savingsContribution": 1000.00,
-#     "cumulativeSavings": 5000.00,
-#     "loanAmount": 2000.00,
-#     "loanDate": "2024-06-01",
-#     "repaymentDueDate": "2024-12-01",
-#     "loanRepayment": 500.00,
-#     "outstandingLoanBalance": 1500.00,
-#     "interestPaid": 50.00,
-#     "dividend": 10.00,
-#     "purposeOfLoan": "Business Expansion",
-#     "remarks": "First loan installment"
+
+# test_data = {
+#     "Transaction dates": [
+#         "05-01-2023",
+#         "06-15-2023",
+#         "07-30-2023"
+#     ],
+#     "Saving Contributions": [
+#         "100",
+#         "150",
+#         "200"
+#     ],
+#     "Cumulative savings": [
+#         "100",
+#         "250",
+#         "450"
+#     ],
+#     "Loan amount": [
+#         "5000",
+#         "",
+#         ""
+#     ],
+#     "Loan date": [
+#         "04-01-2023",
+#         "",
+#         ""
+#     ],
+#     "Repayment Due Date": [
+#         "04-15-2023",
+#         "",
+#         ""
+#     ],
+#     "Loan Repayment": [
+#         "1000",
+#         "",
+#         ""
+#     ],
+#     "Outstanding Loan Balance": [
+#         "4000",
+#         "",
+#         ""
+#     ],
+#     "Interest Paid": [
+#         "50",
+#         "",
+#         ""
+#     ],
+#     "Dividend": [
+#         "",
+#         "",
+#         ""
+#     ],
+#     "Purpose of Loan": [
+#         "Home improvement",
+#         "",
+#         ""
+#     ],
+#     "Remarks": [
+#         "Initial loan setup",
+#         "",
+#         ""
+#     ]
 # }
 
-# Calling the insert_data function and printing the result
 
-# Verifying the inserted data
 
+# def test_update_transactions():
+#     member_id = "0002"  # Replace with the member_id you want to test
+#     result = update_transactions(member_id, test_data)
+    
+#     if result["status"] == "updated":
+#         print(f"Transactions updated successfully for member_id {member_id}")
+#     elif result["status"] == "error":
+#         print(f"Error: {result['message']}")
+
+# # Run the test case
+# if __name__ == "__main__":
+#     test_update_transactions()

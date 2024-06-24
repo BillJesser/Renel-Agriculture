@@ -131,6 +131,20 @@ def handle_new_input():
     else:
         return jsonify({"status": "error", "message": result["message"]}), 500
     
+    
+@app.route('/updateFinance', methods=['POST'])
+@cross_origin()
+def handle_update_finance():
+    data = request.json
+    member_id = data['memberId']
+    transactions = data['transactions']
+    result = update_transactions(member_id, transactions)
+    if result["status"] == "updated":
+        return jsonify({"status": "success", "message": f"Member ID {result['member_id']} updated successfully."}), 200
+    else:
+        return jsonify({"status": "error", "message": result["message"]}), 500
+    
+    
 @app.route('/update_user', methods=['POST'])
 @cross_origin()
 def update_user():
