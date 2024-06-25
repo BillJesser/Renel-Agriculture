@@ -130,15 +130,15 @@ const AccountInfo = ({ route, navigation }) => {
           placeholder="Confirm Password"
           secureTextEntry // Hide confirm password input
         />
-        {error ? <Text style={styles.error}>{error}</Text> : null} // Display error message if any
+        {error ? <Text style={styles.error}>{error}</Text> : null} 
         <View style={styles.buttonContainer}>
           <View style={styles.fullWidthButton}>
-            <Button title="Save" onPress={handleSave} color="#080" /> // Save button
+            <Button title="Save" onPress={handleSave} color="#080" /> 
           </View>
         </View>
         <View style={styles.buttonContainer}>
           <View style={styles.fullWidthButton}>
-            <Button title="Delete User" color="red" onPress={handleDelete} /> // Delete button
+            <Button title="Delete User" color="red" onPress={handleDelete} /> 
           </View>
         </View>
       </View>

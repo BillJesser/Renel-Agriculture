@@ -100,8 +100,8 @@ const AddClient = () => {
           onChangeText={setConfirmPassword} // Update confirm password input
           secureTextEntry={true} // Hide confirm password input
         />
-        {error ? <Text style={styles.error}>{error}</Text> : null} // Display error message if any
-        <Button title="Register" onPress={handleRegister} color="#080" /> // Register button
+        {error ? <Text style={styles.error}>{error}</Text> : null} 
+        <Button title="Register" onPress={handleRegister} color="#080" /> 
       </View>
     </ImageBackground>
   );

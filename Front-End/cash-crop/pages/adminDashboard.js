@@ -45,7 +45,7 @@ export default function AdminDashboardScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={styles.logoutButtonContainer}>
-          <Button title="Logout" onPress={() => navigation.navigate('Home')} color="#080" /> // Logout button
+          <Button title="Logout" onPress={() => navigation.navigate('Home')} color="#080" /> 
         </View>
         <TouchableOpacity style={styles.tutorialLinkContainer} onPress={() => navigation.navigate('AdminTutorial')}>
           <Text style={styles.tutorialLinkText}>Admin Tutorial</Text>
