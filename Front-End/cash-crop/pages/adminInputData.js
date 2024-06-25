@@ -1,19 +1,13 @@
-// Import necessary modules and components from React and React Native
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, ScrollView, Alert, ImageBackground } from 'react-native';
-import { IpContext } from '../IpContext'; // Import the IP context
+import { IpContext } from '../IpContext';
 
-// Import the background image
 const backgroundImage = require('../assets/farmer1.jpeg');
 
-// Define and export the AdminInputData component
 export default function AdminInputData({ navigation, route }) {
-  // Extract memberID, username, and refreshTransactions from route.params
   const { memberID, username, refreshTransactions } = route.params;
-  // Access the IP address from the context
   const ip = useContext(IpContext);
 
-  // Initialize form data state
   const [formData, setFormData] = useState({
     memberId: memberID || '',
     memberName: username || '',
@@ -24,19 +18,19 @@ export default function AdminInputData({ navigation, route }) {
     loanDate: '',
     repaymentDueDate: '',
     loanRepayment: '',
-    outstandingLoanBalance: '',
+    outstandingLoanBalance: '', // Ensure this remains empty or undefined initially
     interestPaid: '',
     dividend: '',
     purposeOfLoan: '',
     remarks: ''
   });
 
-  // Handle change in form input
   const handleChange = (name, value) => {
-    setFormData({ ...formData, [name]: value });
+    if (name !== 'outstandingLoanBalance') { // Exclude outstandingLoanBalance
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  // Handle form submission
   const handleSubmit = async () => {
     try {
       const response = await fetch(`http://${ip}/insert`, {
@@ -50,8 +44,8 @@ export default function AdminInputData({ navigation, route }) {
       if (response.ok) {
         const result = await response.json();
         Alert.alert("Success", `Data inserted`);
-        navigation.goBack(); // Navigate back
-        refreshTransactions(formData.memberId); // Trigger refresh of transactions on Finance screen
+        navigation.goBack();
+        refreshTransactions(formData.memberId);
       } else {
         Alert.alert("Error", "Failed to insert data");
       }
@@ -70,11 +64,11 @@ export default function AdminInputData({ navigation, route }) {
               {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
             </Text>
             <TextInput
-              style={[styles.input, (key === 'memberId' || key === 'memberName') && styles.readOnlyInput]}
+              style={[styles.input, (key === 'memberId' || key === 'memberName' || key === 'outstandingLoanBalance') && styles.readOnlyInput]}
               value={formData[key]}
               onChangeText={(value) => handleChange(key, value)}
               placeholder={key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''}
-              editable={!(key === 'memberId' || key === 'memberName')}
+              editable={!(key === 'memberId' || key === 'memberName' || key === 'outstandingLoanBalance')}
             />
           </View>
         ))}
@@ -86,18 +80,17 @@ export default function AdminInputData({ navigation, route }) {
   );
 }
 
-// Define styles for the component
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover', // or 'stretch'
+    resizeMode: 'cover',
   },
   imageOpacity: {
     opacity: 1,
   },
   container: {
     padding: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Light background to avoid overlapping with text
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
   inputContainer: {
     marginBottom: 15,
@@ -111,12 +104,13 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: 10,
     borderRadius: 5,
-    backgroundColor: '#fff', // Ensure input box is white over the background
+    backgroundColor: '#fff',
   },
   readOnlyInput: {
-    backgroundColor: '#f0f0f0', // Slightly darker background for read-only inputs
+    backgroundColor: '#f0f0f0', // Gray background for read-only inputs
   },
   buttonContainer: {
     marginTop: 20,
   },
 });
+

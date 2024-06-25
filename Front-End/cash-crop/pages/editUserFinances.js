@@ -7,7 +7,7 @@ const backgroundImage = require('../assets/farmer1.jpeg');
 
 export default function EditUserFinances({ navigation, route }) {
   const { username, memberID, refreshTransactions } = route.params;
-  
+
   // Initialize transactions state with all fields
   const initialTransactions = {
     "Transaction dates": [],
@@ -38,16 +38,16 @@ export default function EditUserFinances({ navigation, route }) {
   const fetchTransactions = async (memberID) => {
     try {
       const response = await fetch(`http://${ip}/user_transactions?member_id=${memberID}`);
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
         throw new Error('Response is not in JSON format');
       }
-  
+
       const data = await response.json();
       // Process the JSON data here
       const transformedData = {
@@ -64,7 +64,7 @@ export default function EditUserFinances({ navigation, route }) {
         "Purpose of Loan": data.purposeOfLoan || [],
         "Remarks": data.remarks || []
       };
-  
+
       setTransactions(transformedData);
       setLoading(false);
     } catch (error) {
@@ -140,13 +140,17 @@ export default function EditUserFinances({ navigation, route }) {
               <Text style={styles.transactionIndex}>Transaction index {index + 1}</Text>
               {Object.keys(transactions).map((key) => (
                 <View key={`${key}-${index}`} style={styles.transactionRow}>
-                  {key !== "Remarks" && <Text style={styles.label}>{key}:</Text>}
-                  <TextInput
-                    style={styles.input}
-                    value={transactions[key][index] || ''}
-                    onChangeText={(text) => handleInputChange(text, key, index)}
-                    placeholder={key}
-                  />
+                  <Text style={styles.label}>{key}:</Text>
+                  {key !== "Outstanding Loan Balance" ? (
+                    <TextInput
+                      style={styles.input}
+                      value={transactions[key][index] || ''}
+                      onChangeText={(text) => handleInputChange(text, key, index)}
+                      placeholder={key}
+                    />
+                  ) : (
+                    <Text style={styles.input}>{transactions[key][index] || ''}</Text>
+                  )}
                 </View>
               ))}
               <View style={styles.divider} />
