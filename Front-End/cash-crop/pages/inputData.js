@@ -17,7 +17,7 @@ export default function InputDataScreen({ navigation, route }) {
     loanDate: '',
     repaymentDueDate: '',
     loanRepayment: '',
-    outstandingLoanBalance: '',
+    outstandingLoanBalance: '', // Include outstandingLoanBalance in formData
     interestPaid: '',
     dividend: '',
     purposeOfLoan: '',
@@ -51,7 +51,10 @@ export default function InputDataScreen({ navigation, route }) {
 
   // Function to handle input changes in the form fields
   const handleChange = (name, value) => {
-    setFormData({ ...formData, [name]: value });
+    // Exclude outstandingLoanBalance from being updated in formData
+    if (name !== 'outstandingLoanBalance') {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   // Function to handle form submission
@@ -96,7 +99,7 @@ export default function InputDataScreen({ navigation, route }) {
               value={formData[key]}
               onChangeText={(value) => handleChange(key, value)}
               placeholder={key.toLowerCase().includes('date') ? 'dd-mm-yyyy' : ''}
-              editable={!(key === 'memberId' || key === 'memberName')} // Disable editing for memberId and memberName
+              editable={!(key === 'memberId' || key === 'memberName' || key === 'outstandingLoanBalance')} // Disable editing for memberId, memberName, and outstandingLoanBalance
             />
           </View>
         ))}
@@ -143,3 +146,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
+

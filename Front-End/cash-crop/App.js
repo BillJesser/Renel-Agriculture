@@ -32,11 +32,9 @@ import EditUserFinances from './pages/editUserFinances'
 // Define Stack Navigator
 const Stack = createStackNavigator();
 
-const ipAddress = '192.168.1.73:5000';  
-
 
 // IP address for the server
-const ipAddress = '192.168.1.85:5000';
+const ipAddress = '192.168.1.166:5000';
 
 // Main component App
 export default function App() {
