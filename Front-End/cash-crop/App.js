@@ -28,13 +28,16 @@ import AdminInputData from './pages/adminInputData';
 import Groundnut from './pages/groundnut';
 import Rice from './pages/rice';
 import EditUserFinances from './pages/editUserFinances'
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 // Define Stack Navigator
 const Stack = createStackNavigator();
 
 
 // IP address for the server
-const ipAddress = '192.168.1.166:5000';
+const ipAddress = '192.168.40.250:5000';
 
 // Main component App
 export default function App() {
